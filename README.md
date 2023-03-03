@@ -24,6 +24,7 @@ ___
 - [Альберт Татаринов](https://github.com/letuu)
 - [Анастасия Карпова](https://github.com/AnastasiaSergeeva05)
 - [Алексей Земский](https://github.com/zemscky)
+- [Иван Киселев](https://github.com/nonamecoderx)
 ___
 ## В проекте используются
 - Java 17
@@ -37,7 +38,7 @@ ___
 - PostgreSQL
 - Liquibase
 ___
-## Демонстрация работы бота:
+## Демонстрация работы бэкенд-части сайта на Java:
 
 ___
 
