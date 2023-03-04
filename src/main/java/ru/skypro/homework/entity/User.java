@@ -5,7 +5,7 @@ import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 //@Table(name = "users")
 @NoArgsConstructor
 @EqualsAndHashCode
