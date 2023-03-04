@@ -2,7 +2,9 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.awt.*;
+
 @Data
 public class ImageDto {
-    //пустышка, до создания entity
+    Image image;
 }

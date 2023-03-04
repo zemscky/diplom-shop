@@ -28,7 +28,7 @@ public class AdsController {
         return new ResponseWrapperAds();
     }
 
-    @GetMapping("/me{userId}")
+    @GetMapping("/me/{userId}")
     public ResponseWrapperAds getAdsMe(@PathVariable("userId") Long userId) {
         return new ResponseWrapperAds();
     }
