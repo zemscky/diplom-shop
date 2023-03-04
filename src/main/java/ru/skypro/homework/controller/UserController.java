@@ -14,8 +14,8 @@ import ru.skypro.homework.dto.UserDto;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    @PatchMapping("/me")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         return ResponseEntity.ok(new UserDto());
     }
     @PostMapping("/set_password")
