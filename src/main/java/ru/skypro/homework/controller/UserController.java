@@ -11,13 +11,14 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
+import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+//    private final UserService userService;
 
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
@@ -35,10 +36,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUsers() {
-
-        Collection<User> users = userService.getUsers();
+    public ResponseEntity<List<UserDto>> getUsers() {
+//        Collection<User> users = userService.getUsers();
 //временно так
-        return ResponseEntity.ok(new UserDto());
+        return ResponseEntity.ok(List.of(new UserDto()));
     }
 }
