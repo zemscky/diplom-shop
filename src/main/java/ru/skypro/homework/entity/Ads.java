@@ -25,8 +25,6 @@ public class Ads {
 
     private String description;
 
-    private String image;
-
     private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)
