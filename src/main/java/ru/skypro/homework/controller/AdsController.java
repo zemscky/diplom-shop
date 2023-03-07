@@ -9,9 +9,8 @@ import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapperAds;
-import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.impl.AdsServiceImpl;
 import ru.skypro.homework.dto.ResponseWrapperAdsComment;
-import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 @RequestMapping("/ads")
 public class AdsController {
 
-    private final AdsService adsService;
+    private final AdsServiceImpl adsService;
 
     @GetMapping
     public ResponseWrapperAds getAllAds() {
