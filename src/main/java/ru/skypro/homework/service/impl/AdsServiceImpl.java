@@ -4,19 +4,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repositoriy.AdsCommentRepository;
+import ru.skypro.homework.repositoriy.AdsRepository;
 import ru.skypro.homework.service.AdsService;
+
+import java.util.ArrayList;
 
 @Service
 public class AdsServiceImpl implements AdsService {
 
-    @Override
-    public ResponseWrapperAds getAllAds() {
-        return null;
+    private final AdsRepository adsRepository;
+    private final AdsCommentRepository adsCommentRepository;
+
+    public AdsServiceImpl(AdsRepository adsRepository,
+                          AdsCommentRepository adsCommentRepository) {
+        this.adsRepository = adsRepository;
+        this.adsCommentRepository = adsCommentRepository;
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe(Long userId) {
-        return null;
+    public ResponseWrapper<AdsDto> getAllAds() {
+//        Collection<AdsDto> allAds = AdsMapper.toDTO(adsRepository.findAll());
+//        return new ResponseWrapperAds(allAds.size(), allAds);
+        return ResponseWrapper.of(new ArrayList<AdsDto>());
+    }
+
+    @Override
+    public ResponseWrapper<AdsDto> getAdsMe(Long userId) {
+        return ResponseWrapper.of(new ArrayList<AdsDto>());
     }
 
     @Override
@@ -55,8 +70,8 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapperAdsComment<AdsCommentDto> getAdsComments(long adPk) {
-        return null;
+    public ResponseWrapper<AdsCommentDto> getAdsComments(long adPk) {
+        return ResponseWrapper.of(new ArrayList<AdsCommentDto>());
     }
 
     @Override
