@@ -31,7 +31,8 @@ public class User {
 
     private String phone;
 
-    private String image;
+    @OneToOne(mappedBy = "user")
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     private Role role;

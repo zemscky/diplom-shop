@@ -27,7 +27,8 @@ create table image
     file_size  bigint,
     media_type text,
     data       bytea,
-    ads_id     bigint
+    ads_id     bigint,
+    user_id    bigint
 );
 
 create table "user"
