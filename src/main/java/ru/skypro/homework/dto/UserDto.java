@@ -2,6 +2,7 @@ package ru.skypro.homework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import ru.skypro.homework.entity.Image;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -40,6 +41,6 @@ public class UserDto {
 
     private String city;
 
-    private String image;
+    private Image image;
 
 }

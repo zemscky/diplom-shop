@@ -5,7 +5,7 @@ create table ads
 (
     id bigserial,
     title varchar(400),
-    description text,
+    description varchar(1000),
     image text,
     price int,
     author_id bigint
@@ -15,7 +15,7 @@ create table ads_comment
 (
     id bigserial,
     created_at timestamp,
-    "text" text,
+    "text" varchar(1000),
     author_id bigint,
     pk_ads bigint
 );
@@ -23,15 +23,15 @@ create table ads_comment
 create table image
 (
     id         bigserial,
-    file_path  text,
+    file_path  varchar(255),
     file_size  bigint,
-    media_type text,
+    media_type varchar(1000),
     data       bytea,
     ads_id     bigint,
     user_id    bigint
 );
 
-create table "user"
+create table users
 (
     id        bigserial,
     email     varchar(50),
