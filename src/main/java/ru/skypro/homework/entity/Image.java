@@ -35,6 +35,10 @@ public class Image {
     @JoinColumn(name = "ads_id")
     private Ads ad;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public String toString() {
         return "Ads(id=" + this.getId() + ", image=" + Arrays.toString((this.getData())) + ")";
     }
