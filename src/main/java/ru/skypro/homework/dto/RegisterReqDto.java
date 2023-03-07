@@ -1,8 +1,13 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class RegisterReqDto {
     private String username;
     private String password;

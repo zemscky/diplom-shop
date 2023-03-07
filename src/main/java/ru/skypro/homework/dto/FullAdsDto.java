@@ -1,8 +1,13 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class FullAdsDto {
     private String image;
     private String authorLastName;
