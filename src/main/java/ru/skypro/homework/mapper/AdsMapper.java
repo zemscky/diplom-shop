@@ -41,31 +41,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAdsDto(Ads entity);
 
+    Collection<Ads> toEntityList(Collection<AdsDto> adsDtoList); //это обязательно?
 
-    default List<String> setImagesDto(List<Image> images) {
-        if (images == null || images.size() == 0) {
-            return null;
-        }
-        return images
-                .stream()
-                .map(Image::getFilePath)
-                .collect(Collectors.toList());
-    }
-
-    default List<Image> setImages(List<String> imagesDto) {
-        if (imagesDto == null || imagesDto.size() == 0) {
-            return null;
-        }
-        List<Image> images = new ArrayList<>();
-        for (String s : imagesDto) {
-            Image image = new Image();
-            image.setFilePath(s);
-            images.add(image);
-        }
-        return images;
-    }
-
-    Collection<Ads> toEntityList(Collection<AdsDto> adsDtoList);
-
-    Collection<AdsDto> toDtoList(Collection<Ads> adsList);
+    Collection<AdsDto> toDtoList(Collection<Ads> adsList);//это обязательно?
 }

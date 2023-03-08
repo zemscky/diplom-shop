@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
+import ru.skypro.homework.entity.Image;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class FullAdsDto {
-    private List<String> imagesDto;
+    private List<Image> imagesDto;
     private String authorLastName;
     private String authorFirstName;
     private String phone;
