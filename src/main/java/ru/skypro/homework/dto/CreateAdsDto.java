@@ -2,6 +2,8 @@ package ru.skypro.homework.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -10,7 +12,7 @@ import lombok.*;
 @Setter
 public class CreateAdsDto {
     private String description;
-    private String image;
+    private List<String> imagesDto;
     private int pk;
     private int price;
     private String title;

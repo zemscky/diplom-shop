@@ -28,7 +28,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author", ignore = true)
-    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "images", ignore = true)
     Ads toEntity(CreateAdsDto dto);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
