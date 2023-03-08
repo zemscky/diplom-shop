@@ -18,24 +18,27 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author.id", source = "author")
-    @Mapping(target = "images", expression = "java(setImages(adsDto.getImagesDto()))")  //возможно здесь нужен ignore?
+    @Mapping(target = "images", source = "imagesDto")
+    @Mapping(target = "adsComments", ignore = true)
     Ads toEntity(AdsDto dto);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "imagesDto", expression = "java(setImagesDto(ads.getImages()))")
+    @Mapping(target = "imagesDto", source = "images")
     AdsDto toDto(Ads entity);
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "images", ignore = true)
+    @Mapping(target = "adsComments", ignore = true)
     Ads toEntity(CreateAdsDto dto);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "phone", source = "author.phone")
     @Mapping(target = "email", source = "author.email")
-    @Mapping(target = "imagesDto", expression = "java(setImagesDto(ads.getImages()))")
+    @Mapping(target = "imagesDto", source = "images")
+    @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAdsDto(Ads entity);
 
 
