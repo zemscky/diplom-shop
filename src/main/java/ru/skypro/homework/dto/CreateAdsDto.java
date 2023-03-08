@@ -6,11 +6,6 @@ import ru.skypro.homework.entity.Image;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
-@Setter
 public class CreateAdsDto {
     private String description;
     private List<Image> imagesDto;

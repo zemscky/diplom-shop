@@ -13,11 +13,6 @@ import static ru.skypro.homework.constant.Regexp.EMAIL_REGEXP;
 import static ru.skypro.homework.constant.Regexp.PHONE_REGEXP;
 
 @Data
-@NoArgsConstructor
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
-@Setter
 public class UserDto {
 
     private int id;
