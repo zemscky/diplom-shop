@@ -1,17 +1,13 @@
 package ru.skypro.homework.dto;
 
 import lombok.*;
+import ru.skypro.homework.entity.Image;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
-@Setter
 public class AdsDto {
 
     private int pk;
@@ -24,7 +20,7 @@ public class AdsDto {
     @Size(min = 8)
     private String description;
 
-    private List<String> imagesDto;
+    private List<Image> imagesDto;
 
     private int price;
 
