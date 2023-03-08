@@ -2,9 +2,11 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FullAdsDto {
-    private String image;
+    private List<String> imagesDto;
     private String authorLastName;
     private String authorFirstName;
     private String phone;

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class AdsDto {
@@ -18,7 +19,7 @@ public class AdsDto {
     @Size(min = 8)
     private String description;
 
-    private String image;
+    private List<String> imagesDto;
 
     private int price;
 
