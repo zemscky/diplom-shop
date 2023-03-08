@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.repositoriy.AdsCommentRepository;
-import ru.skypro.homework.repositoriy.AdsRepository;
+import ru.skypro.homework.repository.AdsCommentRepository;
+import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
