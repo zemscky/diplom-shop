@@ -1,10 +1,15 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class FullAdsDto {
     private List<String> imagesDto;
     private String authorLastName;

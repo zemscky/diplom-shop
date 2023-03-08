@@ -1,12 +1,17 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+@Setter
 public class AdsDto {
 
     private int pk;

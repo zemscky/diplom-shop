@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.dto.ResponseWrapperAds;
-import ru.skypro.homework.service.AdsService;
-import ru.skypro.homework.dto.ResponseWrapperAdsComment;
+import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
@@ -24,18 +22,16 @@ public class AdsController {
     private final AdsService adsService;
 
     @GetMapping
-    public ResponseWrapperAds getAllAds() {
-        return new ResponseWrapperAds();
+    public ResponseWrapper<AdsDto> getAllAds() {
+        return ResponseWrapper.of(new ArrayList<AdsDto>());
     }
 
     @GetMapping("/me/{userId}")
-    public ResponseWrapperAds getAdsMe(@PathVariable("userId") Long userId) {
-        return new ResponseWrapperAds();
+    public ResponseWrapper<AdsDto> getAdsMe(@PathVariable("userId") Long userId) {
+        return ResponseWrapper.of(new ArrayList<AdsDto>());
     }
 
-    @GetMapping("/{adId}") // Разобраться: айди юзера или рекламного объявления. Я склоняюсь к тому,
-    // что, судя по названию и возвращаемому значению в файле openapi, это ПОЛНОЕ объявление.
-    // То есть выбираем из списка и открываем.
+    @GetMapping("/{adId}")
     public ResponseEntity<FullAdsDto> getFullAd(@PathVariable("adId") Long adId) {
         return ResponseEntity.ok(new FullAdsDto());
     }
@@ -77,8 +73,8 @@ public class AdsController {
     }
 
     @GetMapping("/{ad_pk}/comments")
-    public ResponseWrapperAdsComment <AdsCommentDto> getAdsComments(@PathVariable("ad_pk") long adPk) {
-        return ResponseWrapperAdsComment.of(new ArrayList<>());
+    public ResponseWrapper<AdsCommentDto> getAdsComments(@PathVariable("ad_pk") long adPk) {
+        return ResponseWrapper.of(new ArrayList<AdsCommentDto>());
     }
 
     @PostMapping("/{ad_pk}/comments")
@@ -87,4 +83,3 @@ public class AdsController {
         return ResponseEntity.ok(new AdsCommentDto());
     }
 }
-
