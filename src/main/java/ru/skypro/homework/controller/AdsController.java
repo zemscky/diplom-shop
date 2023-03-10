@@ -23,7 +23,7 @@ public class AdsController {
 
     @GetMapping
     public ResponseWrapper<AdsDto> getAllAds() {
-        return ResponseWrapper.of(new ArrayList<AdsDto>());
+        return adsService.getAllAds();
     }
 
     @GetMapping("/me/{userId}")

@@ -4,29 +4,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
     private final AdsCommentRepository adsCommentRepository;
+    private final AdsMapper adsMapper;
 
     public AdsServiceImpl(AdsRepository adsRepository,
-                          AdsCommentRepository adsCommentRepository) {
+                          AdsCommentRepository adsCommentRepository,
+                          AdsMapper adsMapper) {
         this.adsRepository = adsRepository;
         this.adsCommentRepository = adsCommentRepository;
+        this.adsMapper = adsMapper;
     }
 
     @Override
     public ResponseWrapper<AdsDto> getAllAds() {
-//        Collection<AdsDto> allAds = AdsMapper.toDTO(adsRepository.findAll());
-//        return new ResponseWrapperAds(allAds.size(), allAds);
-        return ResponseWrapper.of(new ArrayList<AdsDto>());
+        Collection<AdsDto> allAdsDto = adsMapper.toDto(adsRepository.findAll());
+        return ResponseWrapper.of(allAdsDto);
     }
 
     @Override
