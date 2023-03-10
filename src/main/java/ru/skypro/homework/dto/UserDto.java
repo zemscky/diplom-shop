@@ -1,5 +1,6 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import ru.skypro.homework.entity.Image;
@@ -36,6 +37,6 @@ public class UserDto {
 
     private String city;
 
-    private Image image;
+//    private String image;
 
 }
