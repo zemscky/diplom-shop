@@ -6,6 +6,11 @@ import ru.skypro.homework.dto.*;
 
 public interface AdsService {
 
+    /**
+     * Finds all Ads instances in the repository, converts them to AdsDto
+     * and then returns them using the ResponseWrapper
+     * @return ResponseWrapper<AdsDto>
+     */
     ResponseWrapper<AdsDto> getAllAds();
     ResponseWrapper<AdsDto> getAdsMe(Long userId);
     ResponseEntity<FullAdsDto> getFullAd(Long adId);

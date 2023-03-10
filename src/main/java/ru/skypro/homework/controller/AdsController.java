@@ -25,7 +25,7 @@ public class AdsController {
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
     public ResponseWrapper<AdsDto> getAllAds() {
-        return ResponseWrapper.of(new ArrayList<AdsDto>());
+        return adsService.getAllAds();
     }
 
     @Operation(summary = "getAdsMe", description = "getAdsMe")
