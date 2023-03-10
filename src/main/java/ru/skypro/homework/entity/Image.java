@@ -1,6 +1,5 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -8,7 +7,6 @@ import javax.persistence.*;
 import java.util.Arrays;
 
 @Entity
-//@Table(name = "ads_images")
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -31,7 +29,6 @@ public class Image {
     private byte[] data;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "ads_id")
     private Ads ad;
 

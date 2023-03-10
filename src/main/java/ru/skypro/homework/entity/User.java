@@ -1,12 +1,9 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,13 +33,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    @JsonManagedReference //не уверен, возможно @JsonBackReference
-    private List<Ads> ads;
-
-    @OneToMany(mappedBy = "author")
-    @JsonBackReference
-    List<AdsComment> adsComment;
 
 }
