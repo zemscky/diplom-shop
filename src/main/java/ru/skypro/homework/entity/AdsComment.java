@@ -1,13 +1,11 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-//@Table(name = "ads_comments")
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -19,17 +17,15 @@ public class AdsComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     private String text;
 
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_ads")
     private Ads ad;
 

@@ -1,15 +1,11 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-//@Table(name = "ads")
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
@@ -27,18 +23,11 @@ public class Ads {
 
     private int price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    @JsonBackReference
     private User author;
 
     @OneToMany(mappedBy = "ad")
-    @JsonManagedReference
-    private List<AdsComment> adsComments;
-
-    @OneToMany(mappedBy = "ad")
-    @JsonManagedReference
     private List<Image> images;
 
 }
