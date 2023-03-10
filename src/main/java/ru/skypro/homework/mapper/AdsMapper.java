@@ -12,7 +12,6 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author.id", source = "author")
     @Mapping(target = "images", source = "imagesDto")
-    @Mapping(target = "adsComments", ignore = true)
     Ads toEntity(AdsDto dto);
 
     @Mapping(target = "pk", source = "id")
@@ -23,7 +22,6 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "images", ignore = true)
-    @Mapping(target = "adsComments", ignore = true)
     Ads toEntity(CreateAdsDto dto);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
