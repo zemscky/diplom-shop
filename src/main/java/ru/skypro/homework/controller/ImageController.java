@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import ru.skypro.homework.entity.Image;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
+    @Operation(summary = "updateAdsImage", description = "updateAdsImage")
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MultipartFile> updateAdsImage(@PathVariable("id") long id,
                                                 @RequestBody MultipartFile image) {

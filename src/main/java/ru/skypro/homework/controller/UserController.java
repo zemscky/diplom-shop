@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +18,25 @@ import java.util.List;
 public class UserController {
 //    private final UserService userService;
 
+    @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         return ResponseEntity.ok(new UserDto());
     }
 
+    @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
         return ResponseEntity.ok(newPasswordDto);
     }
 
+    @Operation(summary = "updateUserImage", description = "updateUserImage")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MultipartFile> updateUserImage(@RequestBody MultipartFile image) {
         return ResponseEntity.ok(image);
     }
 
+    @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
     public ResponseEntity<List<UserDto>> getUsers() {
 //        Collection<User> users = userService.getUsers();
