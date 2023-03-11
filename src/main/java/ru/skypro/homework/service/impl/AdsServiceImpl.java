@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.mapper.AdsMapper;
@@ -34,19 +35,17 @@ public class AdsServiceImpl implements AdsService {
         return ResponseWrapper.of(allAdsDto);
     }
 
-    @Override
+    @Override // требует доработки на следующих этапах
     public ResponseWrapper<AdsDto> getAdsMe() {
         return ResponseWrapper.of(new ArrayList<AdsDto>());
     }
 
     @Override
     public ResponseEntity<FullAdsDto> getFullAd(Long adId) {
-        if (!adsRepository.findById(adId).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        Ads ads = adsRepository.findById(adId).get();
-        FullAdsDto fullAdsDto = adsMapper.toFullAdsDto(ads);
-        return ResponseEntity.ok(fullAdsDto);
+        Ads ads = adsRepository.findById(adId).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "The ad was not found"));
+        return ResponseEntity.ok(adsMapper.toFullAdsDto(ads));
     }
 
     @Override
