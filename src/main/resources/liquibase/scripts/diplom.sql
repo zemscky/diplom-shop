@@ -33,12 +33,14 @@ create table image
 
 create table users
 (
-    id        bigserial,
-    email     varchar(50),
-    password  varchar(50),
+    id         bigserial,
+    email      varchar(50),
+    password   varchar(50),
     first_name varchar(50),
     last_name  varchar(50),
-    phone     varchar(50),
-    image     text,
-    role      varchar(255)
+    phone      varchar(50),
+    image_id   bigint,
+    role       varchar(255),
+    city       varchar(255),
+    reg_date   timestamp with time zone
 );
