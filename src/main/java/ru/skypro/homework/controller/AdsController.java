@@ -30,14 +30,14 @@ public class AdsController {
 
     @Operation(summary = "getAdsMe", description = "getAdsMe")
     @GetMapping("/me")
-    public ResponseWrapper<AdsDto> getAdsMe(@PathVariable("userId") Long userId) {
-        return ResponseWrapper.of(new ArrayList<AdsDto>());
+    public ResponseWrapper<AdsDto> getAdsMe() {
+        return adsService.getAdsMe();
     }
 
     @Operation(summary = "getFullAd", description = "getFullAd")
     @GetMapping("/{adId}")
     public ResponseEntity<FullAdsDto> getFullAd(@PathVariable("adId") Long adId) {
-        return ResponseEntity.ok(new FullAdsDto());
+        return adsService.getFullAd(adId);
     }
 
     @Operation(summary = "addAds", description = "addAds")

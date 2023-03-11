@@ -12,7 +12,20 @@ public interface AdsService {
      * @return ResponseWrapper<AdsDto>
      */
     ResponseWrapper<AdsDto> getAllAds();
-    ResponseWrapper<AdsDto> getAdsMe(Long userId);
+
+    /**
+     * Finds ads created by the user who makes this request.
+     * @return ResponseWrapper<AdsDto>
+     */
+    ResponseWrapper<AdsDto> getAdsMe();
+
+    /**
+     * Finds an Ads instance in the repository by its id and converts it into
+     * a FullAdsDto instance. The purpose is to provide the user with the
+     * full information on the chosen advertisement.
+     * @param adId
+     * @return ResponseEntity<FullAdsDto>
+     */
     ResponseEntity<FullAdsDto> getFullAd(Long adId);
     ResponseEntity<AdsDto> addAds(Long userId, AdsDto adsDto);
     ResponseEntity<AdsCommentDto> getComments(int adPk, int id);
