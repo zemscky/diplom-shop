@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/ads")
+@Tag(name = "Объявления", description = "AdsController")
 public class AdsController {
 
     private final AdsService adsService;
