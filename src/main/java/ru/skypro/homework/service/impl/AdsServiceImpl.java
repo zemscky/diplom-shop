@@ -1,29 +1,41 @@
 package ru.skypro.homework.service.impl;
 
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
+import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AdsServiceImpl implements AdsService {
 
+    private final UserService userService;
+    private final ImageService imageService;
     private final AdsRepository adsRepository;
     private final AdsCommentRepository adsCommentRepository;
     private final AdsMapper adsMapper;
 
-    public AdsServiceImpl(AdsRepository adsRepository,
+    public AdsServiceImpl(UserService userService, ImageService imageService, AdsRepository adsRepository,
                           AdsCommentRepository adsCommentRepository,
                           AdsMapper adsMapper) {
+        this.userService = userService;
+        this.imageService = imageService;
         this.adsRepository = adsRepository;
         this.adsCommentRepository = adsCommentRepository;
         this.adsMapper = adsMapper;
@@ -48,9 +60,25 @@ public class AdsServiceImpl implements AdsService {
         return ResponseEntity.ok(adsMapper.toFullAdsDto(ads));
     }
 
+    @SneakyThrows
     @Override
-    public ResponseEntity<AdsDto> addAds(Long userId, AdsDto adsDto) {
-        return null;
+    public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles) {
+
+        Ads ads = adsMapper.toEntity(createAdsDto); //передали id, title, description, price
+
+//        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
+        User user = new User();
+        ads.setAuthor(user);
+
+        List<Image> images = new ArrayList<>();
+        for (MultipartFile imageFile : imageFiles) {
+            Image image = imageService.uploadImage(imageFile);
+            images.add(image);
+        }
+        ads.setImages(images);
+
+        adsRepository.save(ads);
+        return adsMapper.toDto(ads);
     }
 
     @Override
