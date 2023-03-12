@@ -8,8 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.service.UserService;
 
+import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -18,7 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "UserController")
 public class UserController {
-//    private final UserService userService;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
@@ -40,9 +46,8 @@ public class UserController {
 
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
-    public ResponseEntity<List<UserDto>> getUsers() {
-//        Collection<User> users = userService.getUsers();
-//        временно так.
-        return ResponseEntity.ok(List.of(new UserDto()));
+    public ResponseWrapper<UserDto> getUsers() {
+        Collection<User> users = userService.getUsers();
+        return ResponseWrapper.of(userMapper.toDto(users));
     }
 }
