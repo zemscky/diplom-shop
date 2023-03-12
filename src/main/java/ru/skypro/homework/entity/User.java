@@ -4,6 +4,7 @@ import lombok.*;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
@@ -18,20 +19,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String email;
-
-    private String password;
-
     private String firstName;
 
     private String lastName;
 
+    private String email;
+
+    private String password;
+
     private String phone;
+
+    private String city;
+
+    private Instant regDate;
 
     @OneToOne(mappedBy = "user")
     private Image image;
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
 }
