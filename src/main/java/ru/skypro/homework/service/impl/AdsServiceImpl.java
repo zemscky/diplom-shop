@@ -18,7 +18,6 @@ import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,23 +61,20 @@ public class AdsServiceImpl implements AdsService {
 
     @SneakyThrows
     @Override
-    public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles) {
+    public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile... imageFiles) {
 
         Ads ads = adsMapper.toEntity(createAdsDto); //передали id, title, description, price
-
 //        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
-        User user = new User();
-        ads.setAuthor(user);
+
+        ads.setAuthor(new User());
 
         List<Image> images = new ArrayList<>();
         for (MultipartFile imageFile : imageFiles) {
-            Image image = imageService.uploadImage(imageFile);
-            images.add(image);
+            images.add(imageService.uploadImage(imageFile));
         }
         ads.setImages(images);
 
-        adsRepository.save(ads);
-        return adsMapper.toDto(ads);
+        return adsMapper.toDto(adsRepository.save(ads));
     }
 
     @Override
