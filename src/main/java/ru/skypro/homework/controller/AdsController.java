@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapper;
+import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 public class AdsController {
 
     private final AdsService adsService;
+
+    private final AdsCommentMapper adsCommentMapper;
 
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
@@ -52,8 +55,8 @@ public class AdsController {
     @Operation(summary = "getComments", description = "getComments")
     @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> getComments(@PathVariable("ad_pk") int adPk,
-                                                     @PathVariable("id") int id) {
-        return ResponseEntity.ok(new AdsCommentDto());
+                                                     @PathVariable("id") long id) {
+        return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
 
     @Operation(summary = "deleteComments", description = "deleteComments")
@@ -68,7 +71,9 @@ public class AdsController {
     public ResponseEntity<AdsCommentDto> updateComments(@PathVariable("ad_pk") int adPk,
                                                      @PathVariable("id") int id,
                                                      @RequestBody AdsCommentDto adsCommentDto) {
-        return ResponseEntity.ok(new AdsCommentDto());
+        return ResponseEntity.ok(adsCommentMapper.toDto(adsService.updateComments(
+                adPk, id, adsCommentMapper.toEntity(adsCommentDto))));
+
     }
 
     @Operation(summary = "updateAds", description = "updateAds")
