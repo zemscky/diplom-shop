@@ -38,10 +38,6 @@ public interface AdsService {
      */
     AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles);
 
-    ResponseEntity<AdsCommentDto> getComments(int adPk, int id);
-    ResponseEntity<HttpStatus> deleteComments(int adPk, int id);
-    ResponseEntity<AdsCommentDto> updateComments(int adPk, int id, AdsCommentDto adsCommentDto);
-    ResponseEntity<AdsDto> addAds(Long userId, AdsDto adsDto);
     /**
      * Getting a comment by ID
      *
