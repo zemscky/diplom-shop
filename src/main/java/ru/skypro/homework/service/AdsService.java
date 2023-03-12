@@ -29,7 +29,14 @@ public interface AdsService {
     ResponseEntity<FullAdsDto> getFullAd(Long adId);
     ResponseEntity<AdsDto> addAds(Long userId, AdsDto adsDto);
     ResponseEntity<AdsCommentDto> getComments(int adPk, int id);
-    ResponseEntity<HttpStatus> deleteComments(int adPk, int id);
+
+    /**
+     * Deletes a comment
+     * @param adPk Ads id
+     * @param id AdsComment id
+     * @return ResponseEntity<HttpStatus>
+     */
+    ResponseEntity<HttpStatus> deleteComments(long adPk, long id);
     ResponseEntity<AdsCommentDto> updateComments(int adPk, int id, AdsCommentDto adsCommentDto);
     ResponseEntity<AdsDto> updateAds(Long userId);
     ResponseEntity<String> removeAds(Long userId);
