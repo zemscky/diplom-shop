@@ -58,9 +58,9 @@ public class AdsController {
 
     @Operation(summary = "deleteComments", description = "deleteComments")
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<HttpStatus> deleteComments(@PathVariable("ad_pk") int adPk,
-                                                       @PathVariable("id") int id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<HttpStatus> deleteComments(@PathVariable("ad_pk") long adPk,
+                                                       @PathVariable("id") long id) {
+        return adsService.deleteComments(adPk, id);
     }
 
     @Operation(summary = "updateComments", description = "updateComments")

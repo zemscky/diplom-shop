@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
+import ru.skypro.homework.entity.AdsComment;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
@@ -58,9 +59,14 @@ public class AdsServiceImpl implements AdsService {
         return null;
     }
 
-    @Override
-    public ResponseEntity<HttpStatus> deleteComments(int adPk, int id) {
-        return null;
+    @Override // Требует доработок на следующем этапе с учётом авторизации пользователей
+    public ResponseEntity<HttpStatus> deleteComments(long adPk, long id) {
+        // Возможно, нам понадобится доставать комментарий из бд в будущем
+        AdsComment comment = adsCommentRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "The comment was not found"));
+        adsCommentRepository.deleteById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Override
