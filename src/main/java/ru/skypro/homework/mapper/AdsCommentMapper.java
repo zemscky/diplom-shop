@@ -5,11 +5,11 @@ import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.entity.AdsComment;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AdsCommentMapper extends WebMapper<AdsCommentDto, AdsComment>{
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "id", source = "pk")
-    @Mapping(target = "ad", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     AdsComment toEntity(AdsCommentDto dto);
 
     @Mapping(target = "author", source = "author.id")

@@ -21,7 +21,6 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final AdsCommentRepository adsCommentRepository;
     private final AdsMapper adsMapper;
-
     public AdsServiceImpl(AdsRepository adsRepository,
                           AdsCommentRepository adsCommentRepository,
                           AdsMapper adsMapper) {
@@ -55,8 +54,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseEntity<AdsCommentDto> getComments(int adPk, int id) {
-        return null;
+    public AdsComment getAdsComment(long adPk, long id) {
+        AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Комментарий с id %d, " +
+                        "принадлежащий объявлению с id %d не найден!", id, adPk)));
+        return adsComment;
     }
 
     @Override // Требует доработок на следующем этапе с учётом авторизации пользователей
@@ -70,8 +73,14 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseEntity<AdsCommentDto> updateComments(int adPk, int id, AdsCommentDto adsCommentDto) {
-        return null;
+    public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
+        AdsComment adsComment = getAdsComment(adPk, id);
+
+//        доработка в 4 этапе,  связано с авторизацией
+
+        adsComment.setText(adsCommentUpdated.getText());
+
+        return adsCommentRepository.save(adsComment);
     }
 
     @Override
