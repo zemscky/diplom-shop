@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper extends WebMapper<UserDto, User>{
 
     String USER_IMAGE = "/user/image/";
