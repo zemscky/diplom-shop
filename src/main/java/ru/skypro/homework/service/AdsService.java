@@ -23,7 +23,7 @@ public interface AdsService {
      * Finds an Ads instance in the repository by its id and converts it into
      * a FullAdsDto instance. The purpose is to provide the user with the
      * full information on the chosen advertisement.
-     * @param adId
+     * @param adId Ads id
      * @return ResponseEntity<FullAdsDto>
      */
     ResponseEntity<FullAdsDto> getFullAd(Long adId);
@@ -38,7 +38,14 @@ public interface AdsService {
      */
     ResponseEntity<HttpStatus> deleteComments(long adPk, long id);
     ResponseEntity<AdsCommentDto> updateComments(int adPk, int id, AdsCommentDto adsCommentDto);
-    ResponseEntity<AdsDto> updateAds(Long userId);
+
+    /**
+     * Updates an ad`s info
+     * @param adId Ads id
+     * @param createAdsDto DTO carrying changes
+     * @return ResponseEntity<AdsDto>
+     */
+    ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto);
     ResponseEntity<String> removeAds(Long userId);
     ResponseWrapper<AdsCommentDto> getAdsComments(long adPk);
     ResponseEntity<AdsCommentDto> addAdsComments(long adPk, AdsCommentDto adsCommentDto);

@@ -75,8 +75,19 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseEntity<AdsDto> updateAds(Long userId) {
-        return null;
+    public ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto) {
+        // Метод маппера здесь бесполезен, т.к. создаёт энтити Ads без id и автора.
+        // По-любому сеттеры понадобятся
+        Ads ads = adsRepository.findById(adId).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "The ad was not found"));
+
+        ads.setTitle(createAdsDto.getTitle());
+        ads.setDescription(createAdsDto.getDescription());
+        ads.setPrice(createAdsDto.getPrice());
+
+        ads = adsRepository.save(ads);
+        return ResponseEntity.ok(adsMapper.toDto(ads));
     }
 
     @Override

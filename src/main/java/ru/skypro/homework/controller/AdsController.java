@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.AdsCommentDto;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.dto.ResponseWrapper;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.ArrayList;
@@ -72,9 +69,10 @@ public class AdsController {
     }
 
     @Operation(summary = "updateAds", description = "updateAds")
-    @PatchMapping("/{userId}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(new AdsDto());
+    @PatchMapping("/{adId}")
+    public ResponseEntity<AdsDto> updateAds(@PathVariable("adId") Long adId,
+                                            @RequestBody CreateAdsDto createAdsDto) {
+        return adsService.updateAds(adId, createAdsDto);
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
