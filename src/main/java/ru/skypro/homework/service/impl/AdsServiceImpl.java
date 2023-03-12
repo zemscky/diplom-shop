@@ -124,18 +124,4 @@ public class AdsServiceImpl implements AdsService {
         return ResponseEntity.ok(adsMapper.toDto(ads));
     }
 
-    @Override
-    public ResponseEntity<String> removeAds(Long userId) {
-        return null;
-    }
-
-    @Override
-    public ResponseWrapper<AdsCommentDto> getAdsComments(long adPk) {
-        return ResponseWrapper.of(new ArrayList<AdsCommentDto>());
-    }
-
-    @Override
-    public ResponseEntity<AdsCommentDto> addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
-        return null;
-    }
 }

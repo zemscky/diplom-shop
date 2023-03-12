@@ -54,7 +54,6 @@ public interface AdsService {
      * @return  ResponseEntity<HttpStatus>
      */
     ResponseEntity<HttpStatus> deleteComments(long adPk, long id);
-    ResponseEntity<AdsCommentDto> updateComments(int adPk, int id, AdsCommentDto adsCommentDto);
 
     /**
      * Updates an ad`s info
@@ -72,8 +71,5 @@ public interface AdsService {
      * @return Modified comment
      */
     AdsComment updateComments(int adPk, int id, AdsComment adsComment);
-    ResponseEntity<AdsDto> updateAds(Long userId);
-    ResponseEntity<String> removeAds(Long userId);
-    ResponseWrapper<AdsCommentDto> getAdsComments(long adPk);
-    ResponseEntity<AdsCommentDto> addAdsComments(long adPk, AdsCommentDto adsCommentDto);
+
 }
