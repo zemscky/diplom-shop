@@ -16,7 +16,6 @@ import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.mapper.AdsCommentMapper;
-import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
