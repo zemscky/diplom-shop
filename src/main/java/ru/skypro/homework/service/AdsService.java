@@ -40,7 +40,7 @@ public interface AdsService {
      * @param imageFiles   Ad photos
      * @return AdsDto
      */
-    AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile imageFiles);
+    Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFiles);
 
     /**
      * Deletes ad by ad ID

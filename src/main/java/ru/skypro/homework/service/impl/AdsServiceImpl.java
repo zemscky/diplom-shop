@@ -62,7 +62,7 @@ public class AdsServiceImpl implements AdsService {
 
     @SneakyThrows
     @Override
-    public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
+    public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
 
         Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
 //        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
