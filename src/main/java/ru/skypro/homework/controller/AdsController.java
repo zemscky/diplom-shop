@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -50,10 +50,11 @@ public class AdsController {
 
     @Operation(summary = "addAds", description = "addAds")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto createAdsDto,
-                                         @RequestPart("image") MultipartFile ... imageFiles) {
+    public ResponseEntity<AdsDto> addAds(@Parameter(description = "Данные нового объявления")
+                                             @RequestPart("image") MultipartFile imageFile,
+                                         @Valid @RequestPart("properties") CreateAdsDto createAdsDto) {
         logger.info("Current method is - addAds");
-        return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFiles));
+        return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFile));
     }
 
     @Operation(summary = "getAdsComment", description = "getAdsComment")

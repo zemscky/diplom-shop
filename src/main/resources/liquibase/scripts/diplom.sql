@@ -6,7 +6,7 @@ create table ads
     id bigserial,
     title varchar(400),
     description varchar(1000),
-    image text,
+    image_id bigint,
     price int,
     author_id bigint
 );

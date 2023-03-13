@@ -27,7 +27,7 @@ public class Image {
     @Type(type = "binary")
     private byte[] data;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JsonIgnore
     @JoinColumn(name = "ads_id")
     private Ads ad;
