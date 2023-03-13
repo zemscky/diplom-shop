@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdsComment;
 
+import java.util.Collection;
+
 public interface AdsService {
 
     /**
@@ -32,15 +34,17 @@ public interface AdsService {
 
     /**
      * Creates an ad based on CreateAdsDto and an photo
+     *
      * @param createAdsDto  Ad model Dto with title, description and price
      * @param imageFiles    Ad photos
-     * @return ResponseEntity<AdsDto>
+     * @return AdsDto
      */
     AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles);
 
     /**
-     * Deletes ad by ad id
-     * @param   adId  Ad id
+     * Deletes ad by ad ID
+     *
+     * @param   adId  Ad ID
      * @return  ResponseEntity<Void>
      */
     ResponseEntity<Void> removeAds(Long adId);
@@ -53,6 +57,14 @@ public interface AdsService {
      * @return      Found comment
      */
     AdsComment getAdsComment(long adPk, long id);
+
+    /**
+     * Getting all comments by ad ID
+     *
+     * @param  adPk Ad ID
+     * @return Collection<AdsComment>
+     */
+    Collection<AdsComment> getComments(long adPk);
 
     /**
      * Deletes a comment

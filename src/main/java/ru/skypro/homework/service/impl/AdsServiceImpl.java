@@ -64,7 +64,7 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile... imageFiles) {
 
-        Ads ads = adsMapper.toEntity(createAdsDto); //передали id, title, description, price
+        Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
 //        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
 
         ads.setAuthor(new User());
@@ -95,6 +95,11 @@ public class AdsServiceImpl implements AdsService {
                         String.format("Комментарий с id %d, " +
                         "принадлежащий объявлению с id %d не найден!", id, adPk)));
         return adsComment;
+    }
+
+    @Override
+    public Collection<AdsComment> getComments(long adPk) {
+        return adsCommentRepository.findAllByAdId(adPk);
     }
 
     @Override // Требует доработок на следующем этапе с учётом авторизации пользователей

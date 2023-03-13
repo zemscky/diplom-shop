@@ -56,9 +56,9 @@ public class AdsController {
         return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFiles));
     }
 
-    @Operation(summary = "getComments", description = "getComments")
+    @Operation(summary = "getAdsComment", description = "getAdsComment")
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<AdsCommentDto> getComments(@PathVariable("ad_pk") int adPk,
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") long adPk,
                                                      @PathVariable("id") long id) {
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
@@ -93,10 +93,10 @@ public class AdsController {
         return adsService.removeAds(adId);
     }
 
-    @Operation(summary = "getAdsComments", description = "getAdsComments")
+    @Operation(summary = "getComments", description = "getComments")
     @GetMapping("/{ad_pk}/comments")
-    public ResponseWrapper<AdsCommentDto> getAdsComments(@PathVariable("ad_pk") long adPk) {
-        return ResponseWrapper.of(new ArrayList<AdsCommentDto>());
+    public ResponseWrapper<AdsCommentDto> getComments(@PathVariable("ad_pk") long adPk) {
+        return ResponseWrapper.of(adsCommentMapper.toDto(adsService.getComments(adPk)));
     }
 
     @Operation(summary = "addAdsComments", description = "addAdsComments")
