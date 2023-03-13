@@ -11,12 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.dto.AdsCommentDto;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.mapper.AdsCommentMapper;
-import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
@@ -61,9 +56,9 @@ public class AdsController {
         return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFiles));
     }
 
-    @Operation(summary = "getComments", description = "getComments")
+    @Operation(summary = "getAdsComment", description = "getAdsComment")
     @GetMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<AdsCommentDto> getComments(@PathVariable("ad_pk") int adPk,
+    public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") long adPk,
                                                      @PathVariable("id") long id) {
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
@@ -93,15 +88,15 @@ public class AdsController {
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> removeAds(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok("Объявление успешно удалено");
+    @DeleteMapping("/{adId}")
+    public ResponseEntity<Void> removeAds(@PathVariable("adId") Long adId) {
+        return adsService.removeAds(adId);
     }
 
-    @Operation(summary = "getAdsComments", description = "getAdsComments")
+    @Operation(summary = "getComments", description = "getComments")
     @GetMapping("/{ad_pk}/comments")
-    public ResponseWrapper<AdsCommentDto> getAdsComments(@PathVariable("ad_pk") long adPk) {
-        return ResponseWrapper.of(new ArrayList<AdsCommentDto>());
+    public ResponseWrapper<AdsCommentDto> getComments(@PathVariable("ad_pk") long adPk) {
+        return ResponseWrapper.of(adsCommentMapper.toDto(adsService.getComments(adPk)));
     }
 
     @Operation(summary = "addAdsComments", description = "addAdsComments")
