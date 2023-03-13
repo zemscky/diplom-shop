@@ -9,7 +9,6 @@ import ru.skypro.homework.service.ImageService;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Transactional
 @RequiredArgsConstructor
