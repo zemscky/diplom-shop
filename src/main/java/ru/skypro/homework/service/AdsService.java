@@ -67,6 +67,15 @@ public interface AdsService {
     Collection<AdsComment> getComments(long adPk);
 
     /**
+     * Adds a comment to an ad
+     *
+     * @param adPk          Ad ID
+     * @param adsCommentDto Comment model Dto with author, createdAt, text
+     * @return AdsCommentDto
+     */
+    AdsCommentDto addAdsComments(long adPk, AdsCommentDto adsCommentDto);
+
+    /**
      * Deletes a comment
      * @param   adPk    Ads id
      * @param   id      AdsComment id
