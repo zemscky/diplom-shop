@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdsComment;
 
@@ -24,11 +25,19 @@ public interface AdsService {
      * Finds an Ads instance in the repository by its id and converts it into
      * a FullAdsDto instance. The purpose is to provide the user with the
      * full information on the chosen advertisement.
-     * @param adId Ad ID
+     * @param adId Ads id
      * @return ResponseEntity<FullAdsDto>
      */
     ResponseEntity<FullAdsDto> getFullAd(Long adId);
-    ResponseEntity<AdsDto> addAds(Long userId, AdsDto adsDto);
+
+    /**
+     * Create Ad
+     * @param createAdsDto
+     * @param imageFiles
+     * @return ResponseEntity<AdsDto>
+     */
+    AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles);
+
     /**
      * Getting a comment by ID
      *
@@ -45,6 +54,14 @@ public interface AdsService {
      * @return  ResponseEntity<HttpStatus>
      */
     ResponseEntity<HttpStatus> deleteComments(long adPk, long id);
+
+    /**
+     * Updates an ad`s info
+     * @param adId Ads id
+     * @param createAdsDto DTO carrying changes
+     * @return ResponseEntity<AdsDto>
+     */
+    ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto);
     /**
      * Changing the comment by ID
      *
@@ -54,8 +71,5 @@ public interface AdsService {
      * @return Modified comment
      */
     AdsComment updateComments(int adPk, int id, AdsComment adsComment);
-    ResponseEntity<AdsDto> updateAds(Long userId);
-    ResponseEntity<String> removeAds(Long userId);
-    ResponseWrapper<AdsCommentDto> getAdsComments(long adPk);
-    ResponseEntity<AdsCommentDto> addAdsComments(long adPk, AdsCommentDto adsCommentDto);
+
 }

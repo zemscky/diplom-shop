@@ -3,17 +3,23 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.mapper.AdsCommentMapper;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -23,6 +29,7 @@ import java.util.ArrayList;
 @Tag(name = "Объявления", description = "AdsController")
 public class AdsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdsController.class);
     private final AdsService adsService;
 
     private final AdsCommentMapper adsCommentMapper;
@@ -30,6 +37,7 @@ public class AdsController {
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
     public ResponseWrapper<AdsDto> getAllAds() {
+        logger.info("Current method is - getAllAds");
         return adsService.getAllAds();
     }
 
@@ -46,10 +54,11 @@ public class AdsController {
     }
 
     @Operation(summary = "addAds", description = "addAds")
-    @PostMapping("/{userId}")
-    public ResponseEntity<AdsDto> addAds(@PathVariable("userId") Long userId,
-                                         @RequestBody AdsDto adsDto) {
-        return ResponseEntity.ok(new AdsDto());
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto createAdsDto,
+                                         @RequestPart("image") MultipartFile ... imageFiles) {
+        logger.info("Current method is - addAds");
+        return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFiles));
     }
 
     @Operation(summary = "getComments", description = "getComments")
@@ -77,9 +86,10 @@ public class AdsController {
     }
 
     @Operation(summary = "updateAds", description = "updateAds")
-    @PatchMapping("/{userId}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(new AdsDto());
+    @PatchMapping("/{adId}")
+    public ResponseEntity<AdsDto> updateAds(@PathVariable("adId") Long adId,
+                                            @RequestBody CreateAdsDto createAdsDto) {
+        return adsService.updateAds(adId, createAdsDto);
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
