@@ -23,7 +23,6 @@ create table ads_comment
 create table image
 (
     id         bigserial,
-    file_path  varchar(255),
     file_size  bigint,
     media_type varchar(1000),
     data       bytea,
