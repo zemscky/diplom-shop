@@ -83,7 +83,7 @@ public class AdsServiceImpl implements AdsService {
         AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Комментарий с id %d, " +
-                        "принадлежащий объявлению с id %d не найден!", id, adPk)));
+                                "принадлежащий объявлению с id %d не найден!", id, adPk)));
         return adsComment;
     }
 
