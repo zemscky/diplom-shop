@@ -31,12 +31,19 @@ public interface AdsService {
     ResponseEntity<FullAdsDto> getFullAd(Long adId);
 
     /**
-     * Create Ad
-     * @param createAdsDto
-     * @param imageFiles
+     * Creates an ad based on CreateAdsDto and an photo
+     * @param createAdsDto  Ad model Dto with title, description and price
+     * @param imageFiles    Ad photos
      * @return ResponseEntity<AdsDto>
      */
     AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles);
+
+    /**
+     * Deletes ad by ad id
+     * @param   adId  Ad id
+     * @return  ResponseEntity<Void>
+     */
+    ResponseEntity<Void> removeAds(Long adId);
 
     /**
      * Getting a comment by ID
@@ -62,6 +69,7 @@ public interface AdsService {
      * @return ResponseEntity<AdsDto>
      */
     ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto);
+
     /**
      * Changing the comment by ID
      *

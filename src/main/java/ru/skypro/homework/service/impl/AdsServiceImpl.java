@@ -79,6 +79,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public ResponseEntity<Void> removeAds(Long adId) {
+        Ads ad = adsRepository.findById(adId).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("The ad with id %d was not found!", adId)));
+        adsRepository.deleteById(adId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
     public AdsComment getAdsComment(long adPk, long id) {
         AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,

@@ -11,12 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.dto.AdsCommentDto;
-import ru.skypro.homework.dto.AdsDto;
-import ru.skypro.homework.dto.FullAdsDto;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.mapper.AdsCommentMapper;
-import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
@@ -93,9 +88,9 @@ public class AdsController {
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> removeAds(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok("Объявление успешно удалено");
+    @DeleteMapping("/{adId}")
+    public ResponseEntity<Void> removeAds(@PathVariable("adId") Long adId) {
+        return adsService.removeAds(adId);
     }
 
     @Operation(summary = "getAdsComments", description = "getAdsComments")
