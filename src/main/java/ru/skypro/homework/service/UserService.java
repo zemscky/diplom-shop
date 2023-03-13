@@ -1,8 +1,8 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.ResponseEntity;
-import ru.skypro.homework.dto.ResponseWrapper;
-import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
+
+import java.util.Collection;
 
 
 public interface UserService {
@@ -11,12 +11,13 @@ public interface UserService {
      * and then return it with ResponseWrapper
      * @return ResponseWrapper<UserDto>
      */
-    ResponseWrapper<UserDto> getUser();
+    Collection<User> getUser();
     /**
      * Update user
      * @return ResponseWrapper<UserDto>
      */
-    ResponseEntity<UserDto> updateUser(Long userId);
+    User updateUser(User updatedUser);
+    User getUserById(long id);
 
 }
 

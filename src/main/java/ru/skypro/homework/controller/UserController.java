@@ -11,6 +11,7 @@ import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
@@ -23,11 +24,13 @@ import java.util.List;
 @Tag(name = "Пользователи", description = "UserController")
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(new UserDto());
+        User user = userMapper.toEntity(userDto);
+        return ResponseEntity.ok(userMapper.toDto(userService.updateUser(user)));
     }
 
     @Operation(summary = "setPassword", description = "setPassword")
@@ -45,6 +48,6 @@ public class UserController {
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
     public ResponseWrapper<UserDto> getUsers() {
-        return userService.getUser();
+        return ResponseWrapper.of(userMapper.toDto(userService.getUser()));
     }
 }
