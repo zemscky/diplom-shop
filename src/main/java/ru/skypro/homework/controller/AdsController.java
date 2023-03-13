@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdsCommentMapper;
+import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.service.AdsService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -28,24 +28,25 @@ public class AdsController {
     private final AdsService adsService;
 
     private final AdsCommentMapper adsCommentMapper;
+    private final AdsMapper adsMapper;
 
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
     public ResponseWrapper<AdsDto> getAllAds() {
         logger.info("Current method is - getAllAds");
-        return adsService.getAllAds();
+        return ResponseWrapper.of(adsMapper.toDto(adsService.getAllAds()));
     }
 
     @Operation(summary = "getAdsMe", description = "getAdsMe")
     @GetMapping("/me")
     public ResponseWrapper<AdsDto> getAdsMe() {
-        return adsService.getAdsMe();
+        return ResponseWrapper.of(adsMapper.toDto(adsService.getAdsMe()));
     }
 
     @Operation(summary = "getFullAd", description = "getFullAd")
     @GetMapping("/{adId}")
     public ResponseEntity<FullAdsDto> getFullAd(@PathVariable("adId") Long adId) {
-        return adsService.getFullAd(adId);
+        return ResponseEntity.ok(adsMapper.toFullAdsDto(adsService.getAdsById(adId)));
     }
 
     @Operation(summary = "addAds", description = "addAds")
@@ -53,7 +54,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> addAds(@RequestPart("properties") @Valid CreateAdsDto createAdsDto,
                                          @RequestPart("image") MultipartFile ... imageFiles) {
         logger.info("Current method is - addAds");
-        return ResponseEntity.ok(adsService.addAds(createAdsDto, imageFiles));
+        return ResponseEntity.ok(adsMapper.toDto(adsService.addAds(createAdsDto, imageFiles)));
     }
 
     @Operation(summary = "getAdsComment", description = "getAdsComment")
@@ -63,11 +64,12 @@ public class AdsController {
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
 
-    @Operation(summary = "deleteComments", description = "deleteComments")
+    @Operation(summary = "deleteAdsComment", description = "deleteAdsComment")
     @DeleteMapping("/{ad_pk}/comments/{id}")
-    public ResponseEntity<HttpStatus> deleteComments(@PathVariable("ad_pk") long adPk,
+    public ResponseEntity<HttpStatus> deleteAdsComment(@PathVariable("ad_pk") long adPk,
                                                        @PathVariable("id") long id) {
-        return adsService.deleteComments(adPk, id);
+        adsService.deleteAdsComment(adPk, id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Operation(summary = "updateComments", description = "updateComments")
@@ -84,13 +86,14 @@ public class AdsController {
     @PatchMapping("/{adId}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable("adId") Long adId,
                                             @RequestBody CreateAdsDto createAdsDto) {
-        return adsService.updateAds(adId, createAdsDto);
+        return ResponseEntity.ok(adsMapper.toDto(adsService.updateAds(adId, createAdsDto)));
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
     @DeleteMapping("/{adId}")
     public ResponseEntity<Void> removeAds(@PathVariable("adId") Long adId) {
-        return adsService.removeAds(adId);
+            adsService.removeAdsById(adId);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "getComments", description = "getComments")
@@ -103,6 +106,6 @@ public class AdsController {
     @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("ad_pk") long adPk,
                                                         @RequestBody @Valid AdsCommentDto adsCommentDto) {
-        return ResponseEntity.ok(adsService.addAdsComments(adPk, adsCommentDto));
+        return ResponseEntity.ok(adsCommentMapper.toDto(adsService.addAdsComments(adPk, adsCommentDto)));
     }
 }
