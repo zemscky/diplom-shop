@@ -28,13 +28,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserDto userDto) {
 
-        User updatedUser = userMapper.toEntity(userDto);
+        User user = new User(); //позже найти юзера, изменяющего данные о себе, если не нашили, то NotFound
 
-        User user = new User(); //позже найти юзера, изменяющего данные о себе
-
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setPhone(updatedUser.getPhone());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPhone(userDto.getPhone());
 
         return userRepository.save(user);
     }
