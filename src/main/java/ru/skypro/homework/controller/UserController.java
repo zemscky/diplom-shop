@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.service.UserService;
 
 import java.util.List;
 
@@ -18,12 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "UserController")
 public class UserController {
-//    private final UserService userService;
+
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(new UserDto());
+        return ResponseEntity.ok(userMapper.toDto(userService.updateUser(userDto)));
     }
 
     @Operation(summary = "setPassword", description = "setPassword")
