@@ -14,7 +14,6 @@ public interface UserService {
     Collection<User> getUser();
     /**
      * Get user by ID
-     *
      * @param id ID user
      */
     User getUserById(long id);

@@ -44,8 +44,8 @@ public class UserController {
 
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
-    public ResponseWrapper<UserDto> getUsers(@PathVariable("id") long id) {
+    public ResponseEntity<UserDto> getUsers(@PathVariable("id") long id) {
         User user = userService.getUserById(id);
-        return ResponseWrapper.of(userMapper.toDto(userService.getUser()));
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 }
