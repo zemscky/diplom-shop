@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
@@ -27,7 +29,7 @@ public class UserController {
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(new UserDto());
+        return ResponseEntity.ok(userMapper.toDto(userService.updateUser(userDto)));
     }
 
     @Operation(summary = "setPassword", description = "setPassword")

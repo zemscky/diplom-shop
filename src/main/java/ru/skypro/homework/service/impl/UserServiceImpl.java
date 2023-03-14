@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.webjars.NotFoundException;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -34,4 +35,16 @@ public class UserServiceImpl implements UserService {
                         "Пользователь с id " + id + " не найден!"));
     }
 
+
+    @Override
+    public User updateUser(UserDto userDto) {
+
+        User user = new User(); //позже найти юзера, изменяющего данные о себе, если не нашили, то NotFound
+
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPhone(userDto.getPhone());
+
+        return userRepository.save(user);
+    }
 }
