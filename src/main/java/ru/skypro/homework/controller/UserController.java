@@ -14,8 +14,6 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 
-import java.util.Collection;
-import java.util.List;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -29,8 +27,7 @@ public class UserController {
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        return ResponseEntity.ok(userMapper.toDto(userService.updateUser(user)));
+        return ResponseEntity.ok(new UserDto());
     }
 
     @Operation(summary = "setPassword", description = "setPassword")
@@ -47,7 +44,8 @@ public class UserController {
 
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
-    public ResponseWrapper<UserDto> getUsers() {
+    public ResponseWrapper<UserDto> getUsers(@PathVariable("id") long id) {
+        User user = userService.getUserById(id);
         return ResponseWrapper.of(userMapper.toDto(userService.getUser()));
     }
 }

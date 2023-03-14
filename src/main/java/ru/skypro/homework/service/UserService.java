@@ -13,11 +13,10 @@ public interface UserService {
      */
     Collection<User> getUser();
     /**
-     * Update user
-     * @return ResponseWrapper<UserDto>
+     * Get user by ID
+     *
+     * @param id ID user
      */
-    User updateUser(User updatedUser);
     User getUserById(long id);
-
 }
 
