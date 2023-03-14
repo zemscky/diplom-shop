@@ -9,12 +9,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.CreateUserDto;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
+
+import javax.validation.Valid;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -27,6 +30,15 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserMapper userMapper;
+
+    @Operation(summary = "addUser", description = "addUser")
+    @PostMapping
+    public ResponseEntity<CreateUserDto> addUser(@Valid @RequestBody CreateUserDto createUserDto) {
+
+        User user = userService.createUser(userMapper.createUserDtoToEntity(createUserDto));
+
+        return ResponseEntity.ok(userMapper.toCreateUserDto(user));
+    }
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
