@@ -34,19 +34,21 @@ public class AdsController {
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
     public ResponseWrapper<AdsDto> getAllAds() {
-        logger.info("Current method is - getAllAds");
+        printLogInfo("GET", "", "getAllAds");
         return ResponseWrapper.of(adsMapper.toDto(adsService.getAllAds()));
     }
 
     @Operation(summary = "getAdsMe", description = "getAdsMe")
     @GetMapping("/me")
     public ResponseWrapper<AdsDto> getAdsMe() {
+        printLogInfo("GET", "/me", "getAdsMe");
         return ResponseWrapper.of(adsMapper.toDto(adsService.getAdsMe()));
     }
 
     @Operation(summary = "getFullAd", description = "getFullAd")
     @GetMapping("/{adId}")
     public ResponseEntity<FullAdsDto> getFullAd(@PathVariable("adId") Long adId) {
+        printLogInfo("GET", "/" + adId, "getFullAd");
         return ResponseEntity.ok(adsMapper.toFullAdsDto(adsService.getAdsById(adId)));
     }
 
@@ -55,7 +57,7 @@ public class AdsController {
     public ResponseEntity<AdsDto> addAds(@Parameter(description = "Данные нового объявления")
                                              @RequestPart("image") MultipartFile imageFile,
                                          @Valid @RequestPart("properties") CreateAdsDto createAdsDto) {
-        logger.info("Current method is - addAds");
+        printLogInfo("POST", "", "addAds");
         return ResponseEntity.ok(adsMapper.toDto(adsService.addAds(createAdsDto, imageFile)));
     }
 
@@ -63,6 +65,7 @@ public class AdsController {
     @GetMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<AdsCommentDto> getAdsComment(@PathVariable("ad_pk") long adPk,
                                                      @PathVariable("id") long id) {
+        printLogInfo("GET", "/" + adPk + "/comments/" + id, "getAdsComment");
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
 
@@ -70,6 +73,7 @@ public class AdsController {
     @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<HttpStatus> deleteAdsComment(@PathVariable("ad_pk") long adPk,
                                                        @PathVariable("id") long id) {
+        printLogInfo("DELETE", "/" + adPk + "/comments/" + id, "deleteAdsComment");
         adsService.deleteAdsComment(adPk, id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -79,6 +83,7 @@ public class AdsController {
     public ResponseEntity<AdsCommentDto> updateComments(@PathVariable("ad_pk") int adPk,
                                                      @PathVariable("id") int id,
                                                      @RequestBody AdsCommentDto adsCommentDto) {
+        printLogInfo("PATCH", "/" + adPk + "/comments/" + id, "updateComments");
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.updateComments(
                 adPk, id, adsCommentMapper.toEntity(adsCommentDto))));
 
@@ -88,12 +93,14 @@ public class AdsController {
     @PatchMapping("/{adId}")
     public ResponseEntity<AdsDto> updateAds(@PathVariable("adId") Long adId,
                                             @RequestBody CreateAdsDto createAdsDto) {
+        printLogInfo("PATCH", "/" + adId, "updateAds");
         return ResponseEntity.ok(adsMapper.toDto(adsService.updateAds(adId, createAdsDto)));
     }
 
     @Operation(summary = "removeAds", description = "removeAds")
     @DeleteMapping("/{adId}")
     public ResponseEntity<Void> removeAds(@PathVariable("adId") Long adId) {
+        printLogInfo("DELETE", "/" + adId, "removeAds");
             adsService.removeAdsById(adId);
         return ResponseEntity.ok().build();
     }
@@ -101,6 +108,7 @@ public class AdsController {
     @Operation(summary = "getComments", description = "getComments")
     @GetMapping("/{ad_pk}/comments")
     public ResponseWrapper<AdsCommentDto> getComments(@PathVariable("ad_pk") long adPk) {
+        printLogInfo("GET", "/" + adPk + "/comments", "getComments");
         return ResponseWrapper.of(adsCommentMapper.toDto(adsService.getComments(adPk)));
     }
 
@@ -108,6 +116,12 @@ public class AdsController {
     @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<AdsCommentDto> addAdsComments(@PathVariable("ad_pk") long adPk,
                                                         @RequestBody @Valid AdsCommentDto adsCommentDto) {
+        printLogInfo("POST", "/" + adPk + "/comments", "addAdsComments");
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.addAdsComments(adPk, adsCommentDto)));
+    }
+
+    private void printLogInfo(String requestMethod,String path, String name) {
+        logger.info("Вызван метод " + name + ", адрес "
+                + requestMethod.toUpperCase() + " запроса /ads" + path);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.mapper.AdsMapper;
@@ -49,7 +50,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override // требует доработки на следующих этапах
     public Collection<Ads> getAdsMe() {
-        return new ArrayList<Ads>();
+        ArrayList<Ads> myAds = new ArrayList<>();
+        myAds.add(new Ads(1, "testTitle", "testDescription", 50_000, new User(), new Image()));
+        return myAds;
     }
 
     public Ads getAdsById(Long adId) {
