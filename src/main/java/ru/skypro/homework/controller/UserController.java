@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(image);
     }
 
-    @Operation(summary = "getUsers", description = "getUsers")
+    @Operation(summary = "getUser", description = "getUser")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
         User user = userService.getUserById(id);
