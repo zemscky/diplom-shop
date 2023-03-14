@@ -1,9 +1,8 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
 
 import java.util.Collection;
@@ -13,15 +12,17 @@ public interface AdsService {
     /**
      * Finds all Ads instances in the repository, converts them to AdsDto
      * and then returns them using the ResponseWrapper
+     *
      * @return ResponseWrapper<AdsDto>
      */
-    ResponseWrapper<AdsDto> getAllAds();
+    Collection<Ads> getAllAds();
 
     /**
      * Finds ads created by the user who makes this request.
+     *
      * @return ResponseWrapper<AdsDto>
      */
-    ResponseWrapper<AdsDto> getAdsMe();
+    Collection<Ads> getAdsMe();
 
     /**
      * Finds an Ads instance in the repository by its id and converts it into
@@ -30,16 +31,16 @@ public interface AdsService {
      * @param adId Ads id
      * @return ResponseEntity<FullAdsDto>
      */
-    ResponseEntity<FullAdsDto> getFullAd(Long adId);
+    Ads getAdsById(Long adId);
 
     /**
      * Creates an ad based on CreateAdsDto and an photo
      *
-     * @param createAdsDto  Ad model Dto with title, description and price
-     * @param imageFiles    Ad photos
+     * @param createAdsDto Ad model Dto with title, description and price
+     * @param imageFiles   Ad photos
      * @return AdsDto
      */
-    AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile ... imageFiles);
+    Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFiles);
 
     /**
      * Deletes ad by ad ID
@@ -47,7 +48,7 @@ public interface AdsService {
      * @param   adId  Ad ID
      * @return  ResponseEntity<Void>
      */
-    ResponseEntity<Void> removeAds(Long adId);
+    Ads removeAdsById(Long adId);
 
     /**
      * Getting a comment by ID
@@ -73,23 +74,25 @@ public interface AdsService {
      * @param adsCommentDto Comment model Dto with author, createdAt, text
      * @return AdsCommentDto
      */
-    AdsCommentDto addAdsComments(long adPk, AdsCommentDto adsCommentDto);
+    AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto);
 
     /**
      * Deletes a comment
-     * @param   adPk    Ads id
-     * @param   id      AdsComment id
-     * @return  ResponseEntity<HttpStatus>
+     *
+     * @param adPk Ads id
+     * @param id   AdsComment id
+     * @return ResponseEntity<HttpStatus>
      */
-    ResponseEntity<HttpStatus> deleteComments(long adPk, long id);
+    AdsComment deleteAdsComment(long adPk, long id);
 
     /**
      * Updates an ad`s info
-     * @param adId Ads id
+     *
+     * @param adId         Ads id
      * @param createAdsDto DTO carrying changes
      * @return ResponseEntity<AdsDto>
      */
-    ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto);
+    Ads updateAds(Long adId, CreateAdsDto createAdsDto);
 
     /**
      * Changing the comment by ID

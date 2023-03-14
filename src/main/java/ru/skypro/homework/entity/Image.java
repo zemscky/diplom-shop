@@ -19,8 +19,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String filePath;
-
     private long fileSize;
 
     private String mediaType;
@@ -29,7 +27,7 @@ public class Image {
     @Type(type = "binary")
     private byte[] data;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JsonIgnore
     @JoinColumn(name = "ads_id")
     private Ads ad;

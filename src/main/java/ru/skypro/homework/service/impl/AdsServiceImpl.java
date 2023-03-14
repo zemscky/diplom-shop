@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,50 +45,41 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapper<AdsDto> getAllAds() {
-        Collection<AdsDto> allAdsDto = adsMapper.toDto(adsRepository.findAll());
-        return ResponseWrapper.of(allAdsDto);
+    public Collection<Ads> getAllAds() {
+        return adsRepository.findAll();
     }
 
     @Override // требует доработки на следующих этапах
-    public ResponseWrapper<AdsDto> getAdsMe() {
-        return ResponseWrapper.of(new ArrayList<AdsDto>());
+    public Collection<Ads> getAdsMe() {
+        return new ArrayList<Ads>();
     }
 
-    @Override
-    public ResponseEntity<FullAdsDto> getFullAd(Long adId) {
-        Ads ads = adsRepository.findById(adId).orElseThrow(
+    public Ads getAdsById(Long adId) {
+        return adsRepository.findById(adId).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "The ad was not found"));
-        return ResponseEntity.ok(adsMapper.toFullAdsDto(ads));
     }
 
     @SneakyThrows
     @Override
-    public AdsDto addAds(CreateAdsDto createAdsDto, MultipartFile... imageFiles) {
+    public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
 
         Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
 //        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
 
         ads.setAuthor(new User());
 
-        List<Image> images = new ArrayList<>();
-        for (MultipartFile imageFile : imageFiles) {
-            images.add(imageService.uploadImage(imageFile));
-        }
-        ads.setImages(images);
+        ads.setImage(imageService.uploadImage(imageFile));
 
-        return adsMapper.toDto(adsRepository.save(ads));
+        return adsRepository.save(ads);
     }
 
-    @Override
-    public ResponseEntity<Void> removeAds(Long adId) {
-        Ads ad = adsRepository.findById(adId).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("The ad with id %d was not found!", adId)));
+    public Ads removeAdsById(Long adId) {
+        Ads ads = getAdsById(adId);
+        //потребуется доработка возможно
+        adsCommentRepository.deleteAdsCommentsByAdsId(adId);
         adsRepository.deleteById(adId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ads;
     }
 
     @Override
@@ -107,44 +97,35 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsCommentDto addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
-
+    public AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
         AdsComment adsComment = adsCommentMapper.toEntity(adsCommentDto);
 //        User user = userService.getUserById(getUserIdFromContext()); //позже найти юзера, добавляющего комментарий
 
         adsComment.setAuthor(new User());
-        adsComment.setAd(adsRepository.findById(adPk).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        String.format("The ad with id %d was not found!", adPk))));
+        adsComment.setAd(getAdsById(adPk));
         adsComment.setCreatedAt(Instant.now());
 
-        return adsCommentMapper.toDto(adsCommentRepository.save(adsComment));
+        return adsCommentRepository.save(adsComment);
     }
 
     @Override // Требует доработок на следующем этапе с учётом авторизации пользователей
-    public ResponseEntity<HttpStatus> deleteComments(long adPk, long id) {
+    public AdsComment deleteAdsComment(long adPk, long id) {
         // Возможно, нам понадобится доставать комментарий из бд в будущем
-        AdsComment comment = adsCommentRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "The comment was not found"));
-        adsCommentRepository.deleteById(id);
-        return ResponseEntity.ok(HttpStatus.OK);
+        AdsComment comment = getAdsComment(adPk, id);
+        adsCommentRepository.delete(comment);
+        return comment;
     }
 
     @Override
     public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
         AdsComment adsComment = getAdsComment(adPk, id);
-
 //        доработка в 4 этапе,  связано с авторизацией
-
         adsComment.setText(adsCommentUpdated.getText());
-
         return adsCommentRepository.save(adsComment);
     }
 
     @Override
-    public ResponseEntity<AdsDto> updateAds(Long adId, CreateAdsDto createAdsDto) {
+    public Ads updateAds(Long adId, CreateAdsDto createAdsDto) {
         // Метод маппера здесь бесполезен, т.к. создаёт энтити Ads без id и автора.
         // По-любому сеттеры понадобятся
         Ads ads = adsRepository.findById(adId).orElseThrow(
@@ -155,8 +136,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setDescription(createAdsDto.getDescription());
         ads.setPrice(createAdsDto.getPrice());
 
-        ads = adsRepository.save(ads);
-        return ResponseEntity.ok(adsMapper.toDto(ads));
+        return adsRepository.save(ads);
     }
 
 }

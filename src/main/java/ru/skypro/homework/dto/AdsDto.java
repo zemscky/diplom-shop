@@ -3,8 +3,6 @@ package ru.skypro.homework.dto ;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 @Data
 public class AdsDto {
@@ -17,7 +15,7 @@ public class AdsDto {
     @NotBlank
     private String description;
 
-    private List<String> imagesDto;
+    private byte[] image;
 
     private int price;
 
