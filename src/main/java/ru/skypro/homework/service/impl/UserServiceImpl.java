@@ -1,33 +1,28 @@
 package ru.skypro.homework.service.impl;
 
+import liquibase.repackaged.net.sf.jsqlparser.util.validation.ValidationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.security.UserDetailsServiceImpl;
 import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
 
-import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
+import static ru.skypro.homework.dto.Role.USER;
 
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    private PasswordEncoder passwordEncoder;
-
-    private UserDetailsServiceImpl userDetailsService;
-
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -42,7 +37,17 @@ public class UserServiceImpl implements UserService {
                         HttpStatus.NOT_FOUND,
                         "Пользователь с id " + id + " не найден!"));
     }
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ValidationException(String.format("Пользователь \"%s\" уже существует!", user.getEmail()));
+        }
 
+        if (user.getRole() == null) {
+            user.setRole(USER);
+        }
+
+        return userRepository.save(user);
+    }
     @Override
     public User updateUser(UserDto userDto) {
 
@@ -54,18 +59,4 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(user);
     }
-
-    @Override
-    public void newPassword(String newPassword, String currentPassword) {
-
-        UserDetails userDetails = getUserDetailsFromContext();
-
-        if (!passwordEncoder.matches(currentPassword, userDetails.getPassword())) {
-            throw new BadCredentialsException("Неверно указан текущий пароль!");
-        }
-
-        userDetailsService.updatePassword(userDetails, passwordEncoder.encode(newPassword));
-    }
-
-
 }
