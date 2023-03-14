@@ -3,6 +3,8 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,38 +23,49 @@ import ru.skypro.homework.entity.User;
 @RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "UserController")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserMapper userMapper;
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        printLogInfo("updateUser", "patch", "/me");
         return ResponseEntity.ok(userMapper.toDto(userService.updateUser(userDto)));
     }
 
     @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        printLogInfo("setPassword", "post", "/set_password");
         return ResponseEntity.ok(newPasswordDto);
     }
 
     @Operation(summary = "updateUserImage", description = "updateUserImage")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MultipartFile> updateUserImage(@RequestBody MultipartFile image) {
+        printLogInfo("updateUserImage", "patch", "/me/image");
         return ResponseEntity.ok(image);
     }
 
-    @Operation(summary = "getUsers", description = "getUsers")
+    @Operation(summary = "getUser", description = "getUser")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
         User user = userService.getUserById(id);
+        printLogInfo("getUser", "get", "/id");
         return ResponseEntity.ok(userMapper.toDto(user));
     }
-
 
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
     public ResponseWrapper<UserDto> getUsers() {
+        printLogInfo("getUsers", "get", "/me");
         return ResponseWrapper.of(userMapper.toDto(userService.getUsers()));
+    }
+
+    private void printLogInfo(String name, String requestMethod, String path) {
+        logger.info("Вызван метод " + name + ", адрес "
+                + requestMethod.toUpperCase() + " запроса /users" + path);
     }
 }

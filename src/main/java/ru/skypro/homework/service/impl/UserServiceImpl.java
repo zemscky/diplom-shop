@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
     }
 
+    @Override
     public Collection<User> getUsers() {
         return userRepository.findAll();
     }
@@ -33,7 +34,6 @@ public class UserServiceImpl implements UserService {
                         HttpStatus.NOT_FOUND,
                         "Пользователь с id " + id + " не найден!"));
     }
-
 
     @Override
     public User updateUser(UserDto userDto) {
