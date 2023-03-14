@@ -18,31 +18,29 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author.id", source = "author")
-    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "image", ignore = true)
     Ads toEntity(AdsDto dto);
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "imagesDto", source = "images", qualifiedByName = "imagesMapping")
+    @Mapping(target = "image", source = "entity.image", qualifiedByName = "imageMapping")
     AdsDto toDto(Ads entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "author", ignore = true)
-    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "image", ignore = true)
     Ads toEntity(CreateAdsDto dto);
 
     @Mapping(target = "authorFirstName", source = "author.firstName")
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "phone", source = "author.phone")
     @Mapping(target = "email", source = "author.email")
-    @Mapping(target = "images", source = "images", qualifiedByName = "imagesMapping")
+    @Mapping(target = "image", source = "entity.image", qualifiedByName = "imageMapping")
     @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAdsDto(Ads entity);
 
-    @Named("imagesMapping")
-    default List<String> imagesMapping(List<Image> images) {
-        return images.stream().
-                map(i -> ADS_IMAGES + i.getId()).
-                collect(Collectors.toList());
+    @Named("imageMapping")
+    default byte[] imageMapping(Image i) {
+        return i.getData();
     }
 }

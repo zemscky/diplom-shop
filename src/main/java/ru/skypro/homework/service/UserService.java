@@ -7,11 +7,11 @@ import java.util.Collection;
 
 public interface UserService {
     /**
-     * Finds a User instance in the repository, converts it to UserDto
-     * and then return it with ResponseWrapper
-     * @return ResponseWrapper<UserDto>
+     * Get all users from repository
+     * and return them all
+     * @return Collection<User>
      */
-    Collection<User> getUser();
+    Collection<User> getUsers();
     /**
      * Get user by ID
      * @param id ID user

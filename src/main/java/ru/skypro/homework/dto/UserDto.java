@@ -35,5 +35,5 @@ public class UserDto {
 
     private String regDate;
 
-    private String image;
+    private byte[] image;
 }
