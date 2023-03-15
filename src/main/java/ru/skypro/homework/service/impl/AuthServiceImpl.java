@@ -1,11 +1,13 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
@@ -53,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Optional<String> changePassword(String name, String currentPassword, String newPassword) {
         if (!manager.userExists(name)) {
-            return Optional.empty();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         UserDetails userDetails = manager.loadUserByUsername(name);
         String encryptedPassword = userDetails.getPassword();

@@ -13,6 +13,7 @@ import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 @Service
@@ -55,12 +56,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public NewPasswordDto setPassword(NewPasswordDto newPasswordDto, Authentication authentication) {
         NewPasswordDto resultPassword = new NewPasswordDto();
-        authService.changePassword(
+        Optional<String> pass = authService.changePassword(
                         authentication.getName(),
                         newPasswordDto.getCurrentPassword(),
                         newPasswordDto.getNewPassword()
-                )
-                .ifPresent(resultPassword::setCurrentPassword);
+                );
+        if (pass.isPresent()) {
+            resultPassword.setCurrentPassword(pass.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return resultPassword;
     }
 }
