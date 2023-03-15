@@ -26,5 +26,12 @@ public interface UserService {
      */
     User updateUser(UserDto userDto);
 
+    /**
+     * Изменение пароля пользователя
+     *
+     * @param newPassword     новый пароль
+     * @param currentPassword старый пароль
+     */
+    void newPassword(String newPassword, String currentPassword);
 }
 
