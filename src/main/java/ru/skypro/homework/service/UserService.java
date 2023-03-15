@@ -1,7 +1,5 @@
 package ru.skypro.homework.service;
 
-import org.springframework.security.core.Authentication;
-import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 import java.util.Collection;
@@ -28,6 +26,12 @@ public interface UserService {
      */
     User updateUser(UserDto userDto);
 
-    NewPasswordDto setPassword(NewPasswordDto newPasswordDto, Authentication authentication);
+    /**
+     * Изменение пароля пользователя
+     *
+     * @param newPassword     новый пароль
+     * @param currentPassword старый пароль
+     */
+    void newPassword(String newPassword, String currentPassword);
 }
 
