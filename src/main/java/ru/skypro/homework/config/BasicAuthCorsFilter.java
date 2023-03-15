@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller;
+package ru.skypro.homework.config;
 
 
 import org.slf4j.Logger;
