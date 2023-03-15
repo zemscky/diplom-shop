@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -39,10 +41,11 @@ public class UserController {
 
     @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
-    public ResponseEntity<NewPasswordDto> setPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<NewPasswordDto> setPassword(@Valid @RequestBody NewPasswordDto newPasswordDto,
+                                                      Authentication authentication) {
         printLogInfo("setPassword", "post", "/set_password");
-        userService.newPassword(newPasswordDto.getNewPassword(),newPasswordDto.getCurrentPassword());
-        return ResponseEntity.ok(newPasswordDto);
+        return ResponseEntity.ok(userService.setPassword(newPasswordDto, authentication));
     }
 
     @Operation(summary = "updateUserImage", description = "updateUserImage")

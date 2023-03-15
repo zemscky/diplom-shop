@@ -10,6 +10,8 @@ import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.Optional;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -46,5 +48,18 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
         return true;
+    }
+
+    @Override
+    public Optional<String> changePassword(String name, String currentPassword, String newPassword) {
+        if (!manager.userExists(name)) {
+            return Optional.empty();
+        }
+        UserDetails userDetails = manager.loadUserByUsername(name);
+        String encryptedPassword = userDetails.getPassword();
+        String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
+
+        return encoder.matches(currentPassword, encryptedPasswordWithoutEncryptionType) ?
+                Optional.of(newPassword) : Optional.empty();
     }
 }

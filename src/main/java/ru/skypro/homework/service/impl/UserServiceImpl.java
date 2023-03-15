@@ -1,12 +1,15 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.UserService;
 
 import java.util.Collection;
@@ -14,10 +17,12 @@ import java.util.Collection;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private final AuthService authService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(AuthService authService, UserRepository userRepository, UserMapper userMapper) {
+        this.authService = authService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
@@ -45,5 +50,17 @@ public class UserServiceImpl implements UserService {
         user.setPhone(userDto.getPhone());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public NewPasswordDto setPassword(NewPasswordDto newPasswordDto, Authentication authentication) {
+        NewPasswordDto resultPassword = new NewPasswordDto();
+        authService.changePassword(
+                        authentication.getName(),
+                        newPasswordDto.getCurrentPassword(),
+                        newPasswordDto.getNewPassword()
+                )
+                .ifPresent(resultPassword::setCurrentPassword);
+        return resultPassword;
     }
 }
