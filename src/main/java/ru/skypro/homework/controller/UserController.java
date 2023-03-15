@@ -22,8 +22,8 @@ import javax.validation.Valid;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequestMapping("/users")
 @RequiredArgsConstructor
+@RequestMapping("/users")
 @Tag(name = "Пользователи", description = "UserController")
 public class UserController {
 
