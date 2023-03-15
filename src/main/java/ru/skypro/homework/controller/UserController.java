@@ -16,6 +16,8 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
 
+import javax.validation.Valid;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -37,8 +39,9 @@ public class UserController {
 
     @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
-    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+    public ResponseEntity<NewPasswordDto> setPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
         printLogInfo("setPassword", "post", "/set_password");
+        userService.newPassword(newPasswordDto.getNewPassword(),newPasswordDto.getCurrentPassword());
         return ResponseEntity.ok(newPasswordDto);
     }
 
