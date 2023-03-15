@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -17,8 +15,6 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
-
-import javax.validation.Valid;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -41,11 +37,10 @@ public class UserController {
 
     @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<NewPasswordDto> setPassword(@Valid @RequestBody NewPasswordDto newPasswordDto,
-                                                      Authentication authentication) {
+    public ResponseEntity<NewPasswordDto> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+        userService.newPassword(newPasswordDto.getNewPassword(), newPasswordDto.getCurrentPassword());
         printLogInfo("setPassword", "post", "/set_password");
-        return ResponseEntity.ok(userService.setPassword(newPasswordDto, authentication));
+        return ResponseEntity.ok(newPasswordDto);
     }
 
     @Operation(summary = "updateUserImage", description = "updateUserImage")
