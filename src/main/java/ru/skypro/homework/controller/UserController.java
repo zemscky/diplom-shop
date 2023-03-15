@@ -1,8 +1,12 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -29,6 +33,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserMapper userMapper;
+    private final AvatarService avatarService;
 
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
@@ -40,16 +45,18 @@ public class UserController {
     @Operation(summary = "setPassword", description = "setPassword")
     @PostMapping("/set_password")
     public ResponseEntity<NewPasswordDto> setPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
-        userService.newPassword(newPasswordDto.getNewPassword(),newPasswordDto.getCurrentPassword());
+        userService.newPassword(newPasswordDto.getNewPassword(), newPasswordDto.getCurrentPassword());
         return ResponseEntity.ok(newPasswordDto);
     }
 
     @Operation(summary = "updateUserImage", description = "updateUserImage")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MultipartFile> updateUserImage(@RequestBody MultipartFile image) {
+    public ResponseEntity<MultipartFile> updateUserImage(Authentication authentication, @RequestBody MultipartFile image) {
         printLogInfo("updateUserImage", "patch", "/me/image");
-        return ResponseEntity.ok(image);
+        User user = userService.findUserByName(authentication);
+          return ResponseEntity.ok().build();
     }
+
 
     @Operation(summary = "getUser", description = "getUser")
     @GetMapping("/{id}")
