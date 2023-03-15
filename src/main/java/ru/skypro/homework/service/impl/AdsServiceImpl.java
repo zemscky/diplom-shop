@@ -23,6 +23,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static ru.skypro.homework.security.SecurityUtils.checkPermissionToAds;
+import static ru.skypro.homework.security.SecurityUtils.getUserIdFromContext;
+
 @Service
 public class AdsServiceImpl implements AdsService {
 
@@ -49,11 +52,19 @@ public class AdsServiceImpl implements AdsService {
         return adsRepository.findAll();
     }
 
-    @Override // требует доработки на следующих этапах
+    @SneakyThrows
+    @Override
+    public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
+        Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
+        User user = userService.getUserById(getUserIdFromContext());
+        ads.setAuthor(user);
+        ads.setImage(imageService.uploadImage(imageFile));
+        return adsRepository.save(ads);
+    }
+
+    @Override
     public Collection<Ads> getAdsMe() {
-        ArrayList<Ads> myAds = new ArrayList<>();
-        myAds.add(new Ads(1, "testTitle", "testDescription", 50_000, new User(), new Image()));
-        return myAds;
+        return adsRepository.findAllByAuthorId(getUserIdFromContext());
     }
 
     public Ads getAdsById(Long adId) {
@@ -62,23 +73,9 @@ public class AdsServiceImpl implements AdsService {
                         HttpStatus.NOT_FOUND, "The ad was not found"));
     }
 
-    @SneakyThrows
-    @Override
-    public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
-
-        Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
-//        User user = userService.getUserById(getUserIdFromContext()); //найти Id юзеоа, создающего объявление
-
-        ads.setAuthor(new User());
-
-        ads.setImage(imageService.uploadImage(imageFile));
-
-        return adsRepository.save(ads);
-    }
-
     public Ads removeAdsById(Long adId) {
         Ads ads = getAdsById(adId);
-        //потребуется доработка возможно
+        checkPermissionToAds(ads);
         adsCommentRepository.deleteAdsCommentsByAdsId(adId);
         adsRepository.deleteById(adId);
         return ads;
