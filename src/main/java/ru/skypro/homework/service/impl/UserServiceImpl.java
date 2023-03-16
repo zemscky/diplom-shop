@@ -12,10 +12,11 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.security.SecurityUtils;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
 import ru.skypro.homework.service.UserService;
 
-import java.util.Collection;
+import java.time.Instant;
 
 import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
 
@@ -33,8 +34,11 @@ public class UserServiceImpl implements UserService {
     private UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public Collection<User> getUsers() {
-        return userRepository.findAll();
+    public User getUsers() {
+//        return userRepository.findAll();
+        return userRepository.findByEmail(SecurityUtils.
+                getUserDetailsFromContext().getUsername()).
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -55,7 +59,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        user.setRegDate(Instant.now());
         return userRepository.save(user);
     }
 
