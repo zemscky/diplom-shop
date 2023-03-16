@@ -72,9 +72,10 @@ public class UserController {
 
     @Operation(summary = "getUsers", description = "getUsers")
     @GetMapping("/me")
-    public ResponseWrapper<UserDto> getUsers() {
+    public UserDto getUsers() {
         printLogInfo("getUsers", "get", "/me");
-        return ResponseWrapper.of(userMapper.toDto(userService.getUsers()));
+        return userMapper.toDto((userService.getUsers()));
+//        return ResponseWrapper.of(userMapper.toDto((userService.getUsers().));
     }
 
     private void printLogInfo(String name, String requestMethod, String path) {
