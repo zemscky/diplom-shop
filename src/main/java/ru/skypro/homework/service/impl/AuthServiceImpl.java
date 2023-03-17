@@ -1,15 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.User;
@@ -39,7 +34,6 @@ public class AuthServiceImpl implements AuthService {
         try {
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userName);
             String encryptedPassword = userDetails.getPassword();
-            String encryptedPasswordWithoutEncryptionType = encryptedPassword.substring(8);
             return encoder.matches(password, encryptedPassword);
         } catch (UsernameNotFoundException e) {
             return false;

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
@@ -40,5 +41,12 @@ public interface UserService {
      * @param currentPassword старый пароль
      */
     void newPassword(String newPassword, String currentPassword);
+
+    /**
+     * Updates users image
+     *
+     * @param image  new image
+     */
+    void updateUserImage(MultipartFile image);
 }
 
