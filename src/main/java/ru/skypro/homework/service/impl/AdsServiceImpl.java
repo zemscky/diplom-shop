@@ -8,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
-import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.mapper.AdsMapper;
@@ -18,9 +17,7 @@ import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
-import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static ru.skypro.homework.security.SecurityUtils.checkPermissionToAds;
