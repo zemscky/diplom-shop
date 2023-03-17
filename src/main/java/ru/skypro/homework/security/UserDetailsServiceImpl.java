@@ -2,6 +2,7 @@ package ru.skypro.homework.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
@@ -14,6 +15,7 @@ import ru.skypro.homework.repository.UserRepository;
 import javax.transaction.Transactional;
 
 @Transactional
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPasswordService {
 

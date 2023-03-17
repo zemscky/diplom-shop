@@ -93,7 +93,7 @@ public class UserController {
 
     @Operation(summary = "updateRole", description = "updateRole")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("{id}/updateRole")
+    @PutMapping("/{id}/updateRole")
     public ResponseEntity<UserDto> updateRole(@PathVariable("id") long id, Role role) {
         printLogInfo("updateAdsImage", "patch", "/id");
 
