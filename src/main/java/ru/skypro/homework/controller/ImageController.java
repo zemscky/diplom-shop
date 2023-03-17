@@ -25,7 +25,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @Operation(summary = "updateAdsImage", description = "updateAdsImage")
-    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdsImage(@PathVariable("id") long id,
                                                 @NotNull @RequestBody MultipartFile image) {
         printLogInfo("updateAdsImage", "patch", "/id");
