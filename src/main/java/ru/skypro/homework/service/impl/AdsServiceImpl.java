@@ -3,6 +3,7 @@ package ru.skypro.homework.service.impl;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.*;
@@ -13,6 +14,7 @@ import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.mapper.AdsMapper;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
+import ru.skypro.homework.security.SecurityUtils;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
@@ -20,8 +22,8 @@ import ru.skypro.homework.service.UserService;
 import java.time.Instant;
 import java.util.Collection;
 
-import static ru.skypro.homework.security.SecurityUtils.checkPermissionToAds;
-import static ru.skypro.homework.security.SecurityUtils.getUserIdFromContext;
+import static ru.skypro.homework.security.SecurityUtils.*;
+
 
 @Service
 public class AdsServiceImpl implements AdsService {
@@ -95,38 +97,55 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
         AdsComment adsComment = adsCommentMapper.toEntity(adsCommentDto);
-//        User user = userService.getUserById(getUserIdFromContext()); //позже найти юзера, добавляющего комментарий
 
-        adsComment.setAuthor(new User());
+        User user = userService.getUserById(getUserIdFromContext());
+
+        adsComment.setAuthor(user);
         adsComment.setAd(getAdsById(adPk));
         adsComment.setCreatedAt(Instant.now());
 
         return adsCommentRepository.save(adsComment);
     }
 
-    @Override // Требует доработок на следующем этапе с учётом авторизации пользователей
+    @Override
     public AdsComment deleteAdsComment(long adPk, long id) {
-        // Возможно, нам понадобится доставать комментарий из бд в будущем
         AdsComment comment = getAdsComment(adPk, id);
+
+        checkPermissionToAdsComment(comment);
+
         adsCommentRepository.delete(comment);
+
         return comment;
     }
 
     @Override
     public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
         AdsComment adsComment = getAdsComment(adPk, id);
-//        доработка в 4 этапе,  связано с авторизацией
+
+        SecurityUtils.checkPermissionToAdsComment(adsComment);
+
         adsComment.setText(adsCommentUpdated.getText());
+
         return adsCommentRepository.save(adsComment);
     }
 
     @Override
+    @SneakyThrows
+    public void updateAdsImage(long id, MultipartFile image) {
+        Ads ads = getAdsById(id);
+
+        checkPermissionToAds(ads);
+
+        ads.setImage(imageService.uploadImage(image));
+
+        adsRepository.save(ads);
+    }
+
+    @Override
     public Ads updateAds(Long adId, CreateAdsDto createAdsDto) {
-        // Метод маппера здесь бесполезен, т.к. создаёт энтити Ads без id и автора.
-        // По-любому сеттеры понадобятся
-        Ads ads = adsRepository.findById(adId).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "The ad was not found"));
+        Ads ads = getAdsById(adId);
+
+        checkPermissionToAds(ads);
 
         ads.setTitle(createAdsDto.getTitle());
         ads.setDescription(createAdsDto.getDescription());

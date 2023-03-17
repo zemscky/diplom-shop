@@ -10,14 +10,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.mapper.AdsMapper;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.AdsService;
+import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -27,10 +34,14 @@ import javax.validation.Valid;
 public class AdsController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdsController.class);
+
     private final AdsService adsService;
+    private final ImageService imageService;
+    private final UserService userService;
 
     private final AdsCommentMapper adsCommentMapper;
     private final AdsMapper adsMapper;
+    private final UserMapper userMapper;
 
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
@@ -107,6 +118,15 @@ public class AdsController {
         return ResponseEntity.ok(adsMapper.toDto(adsService.updateAds(adId, createAdsDto)));
     }
 
+    @Operation(summary = "updateAdsImage", description = "updateAdsImage")
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAdsImage(@PathVariable("id") long id,
+                                                 @NotNull @RequestBody MultipartFile image) {
+        printLogInfo("updateAdsImage", "patch", "/id");
+        adsService.updateAdsImage(id, image);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "removeAds", description = "removeAds")
     @DeleteMapping("/{adId}")
     public ResponseEntity<Void> removeAds(@PathVariable("adId") Long adId) {
@@ -131,6 +151,13 @@ public class AdsController {
 
         printLogInfo("POST", "/" + adPk + "/comments", "addAdsComments");
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.addAdsComments(adPk, adsCommentDto)));
+    }
+
+    @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable("id") long id,
+                                                 @NotNull @RequestBody MultipartFile image) {
+        printLogInfo("updateAdsImage", "patch", "/id");
+        return ResponseEntity.ok(imageService.getImageById(id).getData());
     }
 
     private void printLogInfo(String requestMethod,String path, String name) {
