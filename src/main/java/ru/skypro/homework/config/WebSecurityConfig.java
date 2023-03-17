@@ -30,6 +30,7 @@ public class WebSecurityConfig {
     };
 
     @Bean
+
     public AuthenticationManagerBuilder authenticationManagerBuilder(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
@@ -50,6 +51,7 @@ public class WebSecurityConfig {
                                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                                 .mvcMatchers(AUTH_WHITELIST).permitAll()
                                 .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                .mvcMatchers("/users/**").hasAnyAuthority("ADMIN", "USER")
                 )
                 .httpBasic(withDefaults())
                 .cors();
