@@ -5,23 +5,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateUserDto;
 import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -76,12 +73,11 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    @Operation(summary = "getUsers", description = "getUsers")
+    @Operation(summary = "getUsers", description = "Get info about me")
     @GetMapping("/me")
     public UserDto getUsers() {
         printLogInfo("getUsers", "get", "/me");
         return userMapper.toDto((userService.getUsers()));
-//        return ResponseWrapper.of(userMapper.toDto((userService.getUsers().));
     }
 
     private void printLogInfo(String name, String requestMethod, String path) {
@@ -93,14 +89,16 @@ public class UserController {
     public ResponseEntity<byte[]> getImageById(@PathVariable("id") int id) {
         printLogInfo("getImageOfUser", "get", "/image/{id}");
         return ResponseEntity.ok(imageService.getImageById(id).getData());
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Set-Cookie", "SameSite=none");
-
     }
-//    public ResponseEntity<?> resourceFunction(@PathVariable("id") int id, HttpServletResponse response) {
-//        response.addCookie(new Cookie("SomeName", "someId"));
-//        ByteArrayResource byteArrayResource = new ByteArrayResource(imageService.getImageById(id).getData());
-//        return ResponseEntity.ok(byteArrayResource).;
-//    }
+
+    @Operation(summary = "updateRole", description = "updateRole")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("{id}/updateRole")
+    public ResponseEntity<UserDto> updateRole(@PathVariable("id") long id, Role role) {
+        printLogInfo("updateAdsImage", "patch", "/id");
+
+        UserDto userDto = userMapper.toDto(userService.updateRole(id, role));
+
+        return ResponseEntity.ok(userDto);
+    }
 }
