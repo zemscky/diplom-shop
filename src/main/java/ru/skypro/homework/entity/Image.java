@@ -27,16 +27,6 @@ public class Image {
     @Type(type = "binary")
     private byte[] data;
 
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "ads_id")
-    private Ads ad;
-
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private User user;
-
     public String toString() {
         return "Ads(id=" + this.getId() + ", image=" + Arrays.toString((this.getData())) + ")";
     }

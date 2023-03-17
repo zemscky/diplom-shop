@@ -33,7 +33,7 @@ public class User {
 
     private Instant regDate;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne()
     private Image image;
 
     @Enumerated(EnumType.STRING)

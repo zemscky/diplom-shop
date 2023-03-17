@@ -11,6 +11,7 @@ import ru.skypro.homework.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper extends WebMapper<UserDto, User> {
+//    @Mapping(target = "image", ignore = true)
     CreateUserDto toCreateUserDto(User entity);
 
     User createUserDtoToEntity(CreateUserDto dto);
@@ -28,10 +29,10 @@ public interface UserMapper extends WebMapper<UserDto, User> {
     UserDto toDto(User entity);
 
     @Named("imageMapping")
-    default byte[] imageMapping(Image image) {
+    default String imageMapping(Image image) {
         if (image == null) {
             return null;
         }
-        return image.getData();
+        return "/users/image/" + image.getId();
     }
 }

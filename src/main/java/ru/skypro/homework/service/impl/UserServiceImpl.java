@@ -3,6 +3,8 @@ package ru.skypro.homework.service.impl;
 import liquibase.repackaged.net.sf.jsqlparser.util.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,7 @@ import java.time.Instant;
 import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
 
 import static ru.skypro.homework.dto.Role.USER;
+import static ru.skypro.homework.security.SecurityUtils.getUserIdFromContext;
 
 @Transactional
 @RequiredArgsConstructor
@@ -91,10 +94,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows
-    public void updateUserImage(MultipartFile image) {
+    public String updateUserImage(MultipartFile image) {
         User user = getUserById(getUserDetailsFromContext().getId());
         user.setImage(imageService.uploadImage(image));
         userRepository.save(user);
+
+//
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("data:image/png;base64,");
+//        sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(image.getBytes(), false)));
+        return "{\"data\":{ \"image\": \"avatars/1\"}}";
     }
 
 
