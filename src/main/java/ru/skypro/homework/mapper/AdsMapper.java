@@ -23,7 +23,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "image", ignore = true)
+    @Mapping(target = "image", source = "entity.image", qualifiedByName = "imageMapping")
     AdsDto toDto(Ads entity);
 
     @Mapping(target = "id", ignore = true)
@@ -40,10 +40,10 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     FullAdsDto toFullAdsDto(Ads entity);
 
     @Named("imageMapping")
-    default byte[] imageMapping(Image i) {
-        if (i == null) {
+    default String imageMapping(Image image) {
+        if (image == null) {
             return null;
         }
-        return i.getData();
+        return "/ads/image/" + image.getId();
     }
 }
