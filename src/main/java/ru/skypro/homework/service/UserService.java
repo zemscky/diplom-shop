@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
@@ -49,5 +50,13 @@ public interface UserService {
      * @return
      */
     String updateUserImage(MultipartFile image);
+
+    /**
+     * Изменение роли пользователя
+     *
+     * @param id   идентификатор пользователя
+     * @param role новая роль
+     */
+    User updateRole(long id, Role role);
 }
 
