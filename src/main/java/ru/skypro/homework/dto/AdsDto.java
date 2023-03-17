@@ -10,7 +10,7 @@ public class AdsDto {
 
     private int author;
 
-    private byte[] image;
+    private String image;
 
     private int pk;
 
