@@ -29,6 +29,9 @@ public interface UserMapper extends WebMapper<UserDto, User> {
 
     @Named("imageMapping")
     default byte[] imageMapping(Image image) {
+        if (image == null) {
+            return null;
+        }
         return image.getData();
     }
 }
