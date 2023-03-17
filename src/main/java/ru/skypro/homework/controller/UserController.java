@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateUserDto;
 import ru.skypro.homework.dto.NewPasswordDto;
-import ru.skypro.homework.dto.ResponseWrapper;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.UserService;
@@ -57,9 +56,10 @@ public class UserController {
 
     @Operation(summary = "updateUserImage", description = "updateUserImage")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MultipartFile> updateUserImage(@RequestBody MultipartFile image) {
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) {
         printLogInfo("updateUserImage", "patch", "/me/image");
-        return ResponseEntity.ok(image);
+        userService.updateUserImage(image);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "getUser", description = "getUser")
