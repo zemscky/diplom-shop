@@ -34,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image getImageById(long id) {
-        return null;
+        return imageRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @SneakyThrows

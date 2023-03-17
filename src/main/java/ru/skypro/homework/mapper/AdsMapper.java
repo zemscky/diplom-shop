@@ -42,8 +42,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     @Named("imageMapping")
     default byte[] imageMapping(Image i) {
         if (i == null) {
-            byte[] b = new byte[1];
-            return b;
+            return null;
         }
         return i.getData();
     }

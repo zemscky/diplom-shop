@@ -45,8 +45,9 @@ public interface UserService {
     /**
      * Updates users image
      *
-     * @param image  new image
+     * @param image new image
+     * @return
      */
-    void updateUserImage(MultipartFile image);
+    String updateUserImage(MultipartFile image);
 }
 
