@@ -3,8 +3,6 @@ package ru.skypro.homework.service.impl;
 import liquibase.repackaged.net.sf.jsqlparser.util.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -26,7 +25,6 @@ import java.time.Instant;
 import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
 
 import static ru.skypro.homework.dto.Role.USER;
-import static ru.skypro.homework.security.SecurityUtils.getUserIdFromContext;
 
 @Transactional
 @RequiredArgsConstructor
@@ -41,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUsers() {
-//        return userRepository.findAll();
         return userRepository.findByEmail(SecurityUtils.
                 getUserDetailsFromContext().getUsername()).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -97,13 +94,15 @@ public class UserServiceImpl implements UserService {
     public String updateUserImage(MultipartFile image) {
         User user = getUserById(getUserDetailsFromContext().getId());
         user.setImage(imageService.uploadImage(image));
-        userRepository.save(user);
+        return "/users/image/" + userRepository.save(user).getImage().getId();
+    }
 
-//
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("data:image/png;base64,");
-//        sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(image.getBytes(), false)));
-        return "{\"data\":{ \"image\": \"avatars/1\"}}";
+    @Override
+    public User updateRole(long id, Role role) {
+        User user = getUserById(id);
+        user.setRole(role);
+        userRepository.save(user);
+        return user;
     }
 
 
