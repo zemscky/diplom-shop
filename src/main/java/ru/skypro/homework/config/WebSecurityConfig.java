@@ -30,7 +30,6 @@ public class WebSecurityConfig {
     };
 
     @Bean
-
     public AuthenticationManagerBuilder authenticationManagerBuilder(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)

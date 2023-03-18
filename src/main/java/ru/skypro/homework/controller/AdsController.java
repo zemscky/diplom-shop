@@ -84,6 +84,7 @@ public class AdsController {
                                                      @PathVariable("id") long id) {
 
         printLogInfo("GET", "/" + adPk + "/comments/" + id, "getAdsComment");
+
         return ResponseEntity.ok(adsCommentMapper.toDto(adsService.getAdsComment(adPk, id)));
     }
 
@@ -156,6 +157,7 @@ public class AdsController {
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getAdsImage(@PathVariable("id") long id,
                                                  @NotNull @RequestBody MultipartFile image) {
+
         printLogInfo("updateAdsImage", "patch", "/id");
         return ResponseEntity.ok(imageService.getImageById(id).getData());
     }
