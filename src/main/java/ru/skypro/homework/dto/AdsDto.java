@@ -12,7 +12,7 @@ public class AdsDto {
 
     private String image;
 
-    private int pk;
+    private long pk;
 
     private int price;
 

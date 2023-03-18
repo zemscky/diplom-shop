@@ -37,11 +37,11 @@ public class AdsController {
 
     private final AdsService adsService;
     private final ImageService imageService;
-    private final UserService userService;
+//    private final UserService userService;
 
     private final AdsCommentMapper adsCommentMapper;
     private final AdsMapper adsMapper;
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
 
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
