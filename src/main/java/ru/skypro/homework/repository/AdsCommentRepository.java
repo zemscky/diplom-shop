@@ -18,7 +18,5 @@ public interface AdsCommentRepository extends JpaRepository<AdsComment, Long> {
 
     Collection<AdsComment> findAllByAdId(long adId);
 
-    @Modifying
-    @Query("delete FROM AdsComment a where a.ad.id =: id")
-    void deleteAdsCommentsByAdsId(long id);
+    void deleteAdsCommentsByAdId(long id);
 }

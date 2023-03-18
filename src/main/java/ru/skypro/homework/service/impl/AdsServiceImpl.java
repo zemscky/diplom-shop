@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import static ru.skypro.homework.security.SecurityUtils.*;
 
-
+@Transactional
 @Service
 public class AdsServiceImpl implements AdsService {
 
@@ -75,8 +75,8 @@ public class AdsServiceImpl implements AdsService {
     public Ads removeAdsById(Long adId) {
         Ads ads = getAdsById(adId);
         checkPermissionToAds(ads);
-        adsCommentRepository.deleteAdsCommentsByAdsId(adId);
-        adsRepository.deleteById(adId);
+        adsCommentRepository.deleteAdsCommentsByAdId(adId);
+        adsRepository.delete(ads);
         return ads;
     }
 
