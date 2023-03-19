@@ -72,11 +72,13 @@ After completing all the steps, the site will be available at the link http://lo
 ___
 ## Demonstration of the work of the backend part of the site in Java:
 [Link to demo](https://drive.google.com/file/d/1ZqMeRTkz1IGSeoliSiXfAD7vRaj7R7N-/view?usp=sharing)
+
+https://user-images.githubusercontent.com/113126626/226187107-16063a15-95e6-4963-9a6a-331884c54cfc.mp4
 ___
 
 
 <div id="badges" align="center">
-<a 
-href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&pause=1000&width=435&lines=Thank+you+for+your+attention" alt="Typing SVG" />
+<a
+href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=200&pause=1000&width=435&lines=Thank+you+for+your+attention" alt="Typing SVG" />
 </a>
 </div>
