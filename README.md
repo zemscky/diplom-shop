@@ -4,7 +4,7 @@
 </p>
 <div id="badges" align="center">
 
-## Group work with Java. Back-end part of the site
+## Java Backend Part of Website for Posting Ads. Graduation Group Project
 </div>
 
 <div id="badges" align="center">
@@ -18,15 +18,20 @@
 </div>
 
 ___
-## Description of the functionality of the back-end part of the site in Java.
+## Description and functionality
+
+The website is intended to be a platform where people can sell or resell goods. Users can post ads and leave comments to one another`s advertisements. 
+Implemented features are:
+
 - Authorization and authentication of users
 - Distribution of roles between users: user and administrator
-- CRUD for ads on the site: the administrator can delete or edit all ads, and users — only their own
-- Under each ad, users can leave reviews
-- In the site header, you can search for ads by name
-- Show and save ad images
+- CRUD for ads on the website
+- CRUD for comments to ads
+- Administrators can delete or edit all ads and comments. Users can create, delete or edit their own
+- You can search for ads by title in the site header
+- Uploading and display of ad images and user avatars
 
-The file was provided as a template [Openapi](openapi.yaml)
+File provided as a template: [Openapi](openapi.yaml)
 ___
 ## Specification:
 - [Technical task](https://www.notion.so/df6a5add446d4811a83a27dc0f1a8cad)
@@ -60,14 +65,14 @@ ___
     - Docker image
 ---
 ## Run
-**To run you need:**
-- Clone project to development environment
-- Write properties in a file **[application.properties](src/main/resources/application.properties)**
+**To run the app please:**
+- Clone project to development environment (e.g. IntelliJ IDEA)
+- Specify properties in this file (path to your database) **[application.properties](src/main/resources/application.properties)**
 - Run **[Docker](https://www.docker.com)**
 - Run **[Docker image](https://drive.google.com/file/d/1UZTpeTAQpC4ANkHEFAGK2yjTFzZhXLPz/view)**
 - Run method **main** in file **[HomeworkApplication.java](src/main/java/ru/skypro/homework/HomeworkApplication.java)**
 
-After completing all the steps, the site will be available at the link http://localhost:3000 and Swagger by [link](http://localhost:8080/swagger-ui/index.html#).
+After completing all the steps, the website will be available at http://localhost:3000 and Swagger by [link](http://localhost:8080/swagger-ui/index.html#).
 
 ___
 ## Demonstration of the work of the backend part of the site in Java:
