@@ -19,16 +19,17 @@
 
 ___
 ## Description of the functionality of the back-end part of the site in Java.
-
 - Authorization and authentication of users
 - Distribution of roles between users: user and administrator
 - CRUD for ads on the site: the administrator can delete or edit all ads, and users — only their own
 - Under each ad, users can leave reviews
 - In the site header, you can search for ads by name
 - Show and save ad images
+
+The file was provided as a template [Openapi](openapi.yaml)
 ___
 ## Specification:
-- [ТЗ](https://www.notion.so/df6a5add446d4811a83a27dc0f1a8cad)
+- [Technical task](https://www.notion.so/df6a5add446d4811a83a27dc0f1a8cad)
 ___
 ## Development team:
 - [Никита Мавродий](https://github.com/nikitamavrodiy)
@@ -39,35 +40,43 @@ ___
 - [Иван Киселев](https://github.com/nonamecoderx)
 ___
 ## Tools used in the project
-- Java 11
-- Docker
-- Spring
-- Lombok
-- Mapstruct
-- Liquibase
+* Backend:
+    - Java 11
+    - Maven
+    - Spring Boot
+    - Spring Web
+    - Spring Data
+    - Spring JPA
+    - Spring Security
+    - GIT
+    - REST
+    - Swagger
+    - Lombok
+    - Stream API
+* SQL:
+    - PostgreSQL
+    - Liquibase
+* Frontend:
+    - Docker image
+---
+### Run
+**To run you need:**
+- Clone project to development environment
+- Write properties in a file **[application.properties](src/main/resources/application.properties)**
+- Run **[Docker](https://www.docker.com)**
+- Run **[Docker image](https://drive.google.com/file/d/1ZoGOJaHidywKNYlvNuz6kb0KoGPbeC_b/view)**
+- Run method **main** in file **[HomeworkApplication.java](src/main/java/ru/skypro/homework/HomeworkApplication.java)**
+
+After completing all the steps, the site will be available at the link http://localhost:3000 and Swagger by [link](http://localhost:8080/swagger-ui/index.html#).
+
 ___
 ## Demonstration of the work of the backend part of the site in Java:
+[Link to demo](https://drive.google.com/file/d/1ZqMeRTkz1IGSeoliSiXfAD7vRaj7R7N-/view?usp=sharing)
 ___
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="
-      https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake-dark.svg
-    "
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="
-      https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake.svg
-    "
-  />
-  <img
-    alt="github contribution grid snake animation"
-    src="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake.svg"
-  />
-</picture>
+
 
 <div id="badges" align="center">
-
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&pause=1000&color=1BA9F7&width=435&lines=Thank+you+for+your+attention)](https://git.io/typing-svg)
+<a 
+href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&pause=1000&width=435&lines=Thank+you+for+your+attention" alt="Typing SVG" />
+</a>
 </div>
