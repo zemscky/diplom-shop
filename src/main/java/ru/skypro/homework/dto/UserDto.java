@@ -14,7 +14,7 @@ import static ru.skypro.homework.constant.Regexp.PHONE_REGEXP;
 @Data
 public class UserDto {
 
-    private int id;
+    private long id;
 
     @NotBlank
     @Size(min = 3)

@@ -33,9 +33,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ImageService imageService;
-
-    private PasswordEncoder passwordEncoder;
-    private UserDetailsServiceImpl userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     public User getUsers() {
