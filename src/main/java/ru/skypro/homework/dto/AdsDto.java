@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AdsDto {
 
-    private int author;
+    private long author;
 
     private String image;
 
