@@ -32,12 +32,12 @@ ___
 - [Technical task](https://www.notion.so/df6a5add446d4811a83a27dc0f1a8cad)
 ___
 ## Development team:
-- [Никита Мавродий](https://github.com/nikitamavrodiy)
-- [Ирина Миронова](https://github.com/irinamironova9)
-- [Альберт Татаринов](https://github.com/letuu)
-- [Анастасия Карпова](https://github.com/AnastasiaSergeeva05)
-- [Алексей Земский](https://github.com/zemscky)
-- [Иван Киселев](https://github.com/nonamecoderx)
+- [Nikita Mavrodiy](https://github.com/nikitamavrodiy)
+- [Irina Mironova](https://github.com/irinamironova9)
+- [Albert Tatarinov](https://github.com/letuu)
+- [Anastasia Karpova](https://github.com/AnastasiaSergeeva05)
+- [Alexey Zemsky](https://github.com/zemscky)
+- [Ivan Kiselev](https://github.com/nonamecoderx)
 ___
 ## Tools used in the project
 * Backend:
@@ -59,7 +59,7 @@ ___
 * Frontend:
     - Docker image
 ---
-### Run
+## Run
 **To run you need:**
 - Clone project to development environment
 - Write properties in a file **[application.properties](src/main/resources/application.properties)**
