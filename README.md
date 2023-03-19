@@ -64,7 +64,7 @@ ___
 - Clone project to development environment
 - Write properties in a file **[application.properties](src/main/resources/application.properties)**
 - Run **[Docker](https://www.docker.com)**
-- Run **[Docker image](https://drive.google.com/file/d/1ZoGOJaHidywKNYlvNuz6kb0KoGPbeC_b/view)**
+- Run **[Docker image](https://drive.google.com/file/d/1UZTpeTAQpC4ANkHEFAGK2yjTFzZhXLPz/view)**
 - Run method **main** in file **[HomeworkApplication.java](src/main/java/ru/skypro/homework/HomeworkApplication.java)**
 
 After completing all the steps, the site will be available at the link http://localhost:3000 and Swagger by [link](http://localhost:8080/swagger-ui/index.html#).
