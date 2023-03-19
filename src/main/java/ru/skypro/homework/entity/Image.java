@@ -19,8 +19,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String filePath;
-
     private long fileSize;
 
     private String mediaType;
@@ -28,16 +26,6 @@ public class Image {
     @Lob
     @Type(type = "binary")
     private byte[] data;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "ads_id")
-    private Ads ad;
-
-    @OneToOne
-    @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public String toString() {
         return "Ads(id=" + this.getId() + ", image=" + Arrays.toString((this.getData())) + ")";

@@ -3,14 +3,22 @@ package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import ru.skypro.homework.dto.CreateUserDto;
+import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 
-@Mapper
-public interface UserMapper extends WebMapper<UserDto, User>{
+@Mapper(componentModel = "spring")
+public interface UserMapper extends WebMapper<UserDto, User> {
+//    @Mapping(target = "image", ignore = true)
+    CreateUserDto toCreateUserDto(User entity);
 
-    String USER_IMAGE = "/user/image/";
+    User createUserDtoToEntity(CreateUserDto dto);
+
+    @Mapping(target = "role", defaultValue = "USER")
+    @Mapping(source = "username", target = "email")
+    User toEntity(RegisterReqDto dto);
 
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "image", ignore = true)
@@ -22,6 +30,9 @@ public interface UserMapper extends WebMapper<UserDto, User>{
 
     @Named("imageMapping")
     default String imageMapping(Image image) {
-        return USER_IMAGE + image.getId();
+        if (image == null) {
+            return null;
+        }
+        return "/users/image/" + image.getId();
     }
 }

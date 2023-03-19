@@ -1,9 +1,7 @@
 package ru.skypro.homework.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -27,7 +25,8 @@ public class Ads {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(mappedBy = "ad")
-    private List<Image> images;
+    @OneToOne()
+    @JoinColumn()
+    private Image image;
 
 }
