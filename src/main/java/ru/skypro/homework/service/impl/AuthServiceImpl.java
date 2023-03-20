@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,10 @@ public class AuthServiceImpl implements AuthService {
         try {
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userName);
             String encryptedPassword = userDetails.getPassword();
-            return encoder.matches(password, encryptedPassword);
+            if (!encoder.matches(password, encryptedPassword)) {
+                throw new BadCredentialsException("Wrong password!");
+            }
+            return true;
         } catch (UsernameNotFoundException e) {
             return false;
         }
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.toEntity(registerReqDto);
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ValidationException(String.format("Пользователь \"%s\" уже зарегистрирован!", user.getEmail()));
+            throw new ValidationException(String.format("User \"%s\" is already registered!", user.getEmail()));
         }
 
         user.setPassword(encoder.encode(user.getPassword()));

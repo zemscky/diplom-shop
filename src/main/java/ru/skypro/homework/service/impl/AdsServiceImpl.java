@@ -1,12 +1,12 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.*;
+import org.webjars.NotFoundException;
+import ru.skypro.homework.dto.AdsCommentDto;
+import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
 import ru.skypro.homework.entity.User;
@@ -54,7 +54,7 @@ public class AdsServiceImpl implements AdsService {
     @SneakyThrows
     @Override
     public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
-        Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
+        Ads ads = adsMapper.toEntity(createAdsDto);
         User user = userService.getUserById(getUserIdFromContext());
         ads.setAuthor(user);
         ads.setImage(imageService.uploadImage(imageFile));
@@ -68,8 +68,7 @@ public class AdsServiceImpl implements AdsService {
 
     public Ads getAdsById(Long adId) {
         return adsRepository.findById(adId).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "The ad was not found"));
+                () -> new NotFoundException("Ad with id " + adId + " not found!"));
     }
 
     public Ads removeAdsById(Long adId) {
@@ -83,9 +82,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment getAdsComment(long adPk, long id) {
         AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Комментарий с id %d, " +
-                        "принадлежащий объявлению с id %d не найден!", id, adPk)));
+                .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d " +
+                        "belonging to ad with id %d not found!", id, adPk)));
         return adsComment;
     }
 
