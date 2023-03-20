@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     public boolean register(RegisterReqDto registerReqDto, Role role) {
         User user = userMapper.toEntity(registerReqDto);
 
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ValidationException(String.format("Пользователь \"%s\" уже зарегистрирован!", user.getEmail()));
         }
 

@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUsers() {
-        return userRepository.findByEmail(SecurityUtils.
+        return userRepository.findByEmailIgnoreCase(SecurityUtils.
                 getUserDetailsFromContext().getUsername()).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ValidationException(String.format("Пользователь \"%s\" уже существует!", user.getEmail()));
         }
 
