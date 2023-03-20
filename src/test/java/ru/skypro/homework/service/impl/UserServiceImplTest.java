@@ -60,7 +60,7 @@ public class UserServiceImplTest {
         User testUser = new User();
         testUser.setPassword("123456789");
 
-        when(userRepository.existsByEmail(any())).thenReturn(false);
+        when(userRepository.existsByEmailIgnoreCase(any())).thenReturn(false);
         when(passwordEncoder.encode(any())).thenReturn("12345678");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
