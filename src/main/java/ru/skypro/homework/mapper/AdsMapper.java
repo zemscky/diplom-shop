@@ -44,6 +44,6 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
         if (image == null) {
             return null;
         }
-        return "/ads/image/" + image.getId();
+        return ADS_IMAGES + image.getId();
     }
 }
