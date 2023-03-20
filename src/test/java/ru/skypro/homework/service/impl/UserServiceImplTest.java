@@ -79,7 +79,7 @@ public class UserServiceImplTest {
         testUser.setRole(Role.USER);
         SecurityContextHolder.setContext(securityContext);
 
-        when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
+        when(userRepository.findByEmailIgnoreCase(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
 
@@ -87,7 +87,7 @@ public class UserServiceImplTest {
 
         assertEquals(user, testUser);
 
-        verify(userRepository, times(1)).findByEmail(testUser.getEmail());
+        verify(userRepository, times(1)).findByEmailIgnoreCase(testUser.getEmail());
     }
 
     @Test

@@ -6,5 +6,4 @@ import lombok.*;
 public class LoginReqDto {
     private String password;
     private String username;
-
 }

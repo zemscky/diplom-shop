@@ -49,7 +49,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPa
     }
 
     private User getUserByUsername(String username) {
-        return userRepository.findByEmail(username).orElseThrow(() ->
+        return userRepository.findByEmailIgnoreCase(username).orElseThrow(() ->
                 new UsernameNotFoundException(String.format("Пользователь с email: \"%s\" не найден", username)));
     }
 }

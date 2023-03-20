@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUsers() {
-        return userRepository.findByEmail(SecurityUtils.
+        return userRepository.findByEmailIgnoreCase(SecurityUtils.
                 getUserDetailsFromContext().getUsername()).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
