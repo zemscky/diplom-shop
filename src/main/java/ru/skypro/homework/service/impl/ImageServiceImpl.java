@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.webjars.NotFoundException;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
@@ -34,19 +35,18 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image getImageById(long id) {
-        return imageRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return imageRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Image with id " + id + " not found!"));
     }
 
     @SneakyThrows
     @Override
     public ResponseEntity<byte[]> updateAdsImage(long id, MultipartFile image) {
         if (image == null) {
-            return ResponseEntity.badRequest().build();
+            throw new NotFoundException("New ad image not uploaded");
         }
 
-        Image img = imageRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "The image was not found"));
+        Image img = getImageById(id);
 
         img.setFileSize(image.getSize());
         img.setMediaType(image.getContentType());

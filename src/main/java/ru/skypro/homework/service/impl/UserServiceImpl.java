@@ -38,9 +38,8 @@ public class UserServiceImpl implements UserService {
     public User getUsers() {
         return userRepository.findByEmail(SecurityUtils.
                 getUserDetailsFromContext().getUsername()).
-                orElseThrow(()-> new NotFoundException("User with email "
-                        + getUserDetailsFromContext().getUsername()
-                        + " not found!"));
+                orElseThrow(()-> new NotFoundException(String.format("User with email \"%s\" not found!",
+                        getUserDetailsFromContext().getUsername())));
     }
 
     @Override

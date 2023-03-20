@@ -130,6 +130,10 @@ public class AdsServiceImpl implements AdsService {
     @Override
     @SneakyThrows
     public void updateAdsImage(long id, MultipartFile image) {
+        if (image == null) {
+            throw new NotFoundException("New ad image not uploaded");
+        }
+
         Ads ads = getAdsById(id);
 
         checkPermissionToAds(ads);
