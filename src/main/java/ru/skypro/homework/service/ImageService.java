@@ -8,17 +8,17 @@ import java.io.IOException;
 
 public interface ImageService {
     /**
-     * Сохранение картинки в БД
+     * Saving an image to the database
      *
-     * @param imageFile Объект картинка
+     * @param imageFile Object picture
      * @return Images
      */
     Image uploadImage(MultipartFile imageFile) throws IOException;
 
     /**
-     * Получение картинки по ID
+     * Getting a picture by ID
      *
-     * @param id Id картинки
+     * @param id Id Pictures
      * @return Images
      */
     Image getImageById(long id);
@@ -27,9 +27,9 @@ public interface ImageService {
      * Updates Image instance`s info (fields: fileSize, mediaType, data).
      * The purpose is to replace an old image for an ad on the website with a new one.
      *
-     * @param id Image instance`s id
+     * @param id    Image instance`s id
      * @param image image file
-     * @return ResponseEntity<byte[]>
+     * @return ResponseEntity<byte [ ]>
      */
     ResponseEntity<byte[]> updateAdsImage(long id, MultipartFile image);
 }

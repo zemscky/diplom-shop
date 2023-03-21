@@ -3,14 +3,13 @@ package ru.skypro.homework.service.impl;
 import liquibase.repackaged.net.sf.jsqlparser.util.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
+import org.webjars.NotFoundException;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
@@ -22,9 +21,8 @@ import ru.skypro.homework.service.UserService;
 
 import java.time.Instant;
 
-import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
-
 import static ru.skypro.homework.dto.Role.USER;
+import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
 
 @Transactional
 @RequiredArgsConstructor
@@ -38,22 +36,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUsers() {
-        return userRepository.findByEmail(SecurityUtils.
+        return userRepository.findByEmailIgnoreCase(SecurityUtils.
                 getUserDetailsFromContext().getUsername()).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                orElseThrow(()-> new NotFoundException(String.format("User with email \"%s\" not found!",
+                        getUserDetailsFromContext().getUsername())));
     }
 
     @Override
     public User getUserById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Пользователь с id " + id + " не найден!"));
+                .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
     }
 
     public User createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ValidationException(String.format("Пользователь \"%s\" уже существует!", user.getEmail()));
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new ValidationException(String.format("User \"%s\" already exists!", user.getEmail()));
         }
 
         if (user.getRole() == null) {
@@ -82,7 +79,7 @@ public class UserServiceImpl implements UserService {
         UserDetails userDetails = getUserDetailsFromContext();
 
         if (!passwordEncoder.matches(currentPassword, userDetails.getPassword())) {
-            throw new BadCredentialsException("Неверно указан текущий пароль!");
+            throw new BadCredentialsException("The current password is incorrect!");
         }
 
         userDetailsService.updatePassword(userDetails, passwordEncoder.encode(newPassword));
@@ -103,6 +100,5 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
-
 
 }

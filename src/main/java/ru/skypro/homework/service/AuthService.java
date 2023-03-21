@@ -4,18 +4,18 @@ import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 
 /**
- * Сервис для регистрации пользователя и входа
+ * Service for user registration and login
  */
 public interface AuthService {
 
     /**
-     * @param userName Логин (email)
-     * @param password Пароль
+     * @param userName Login (email)
+     * @param password Password
      */
     boolean login(String userName, String password);
 
     /**
-     * @param role Роль пользователя
+     * @param role User role
      */
     boolean register(RegisterReqDto registerReqDto, Role role);
 }

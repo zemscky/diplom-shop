@@ -15,6 +15,7 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.MyUserDetails;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
@@ -48,17 +49,18 @@ public class UserServiceImplTest {
     @Mock
     private ImageServiceImpl imageService;
 
+    @Mock
+    private ImageRepository imageRepository;
 
     @InjectMocks
     private UserServiceImpl userService;
-
 
     @Test
     void createUser() {
         User testUser = new User();
         testUser.setPassword("123456789");
 
-        when(userRepository.existsByEmail(any())).thenReturn(false);
+        when(userRepository.existsByEmailIgnoreCase(any())).thenReturn(false);
         when(passwordEncoder.encode(any())).thenReturn("12345678");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
@@ -77,7 +79,7 @@ public class UserServiceImplTest {
         testUser.setRole(Role.USER);
         SecurityContextHolder.setContext(securityContext);
 
-        when(userRepository.findByEmail(testUser.getEmail())).thenReturn(Optional.of(testUser));
+        when(userRepository.findByEmailIgnoreCase(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
 
@@ -85,7 +87,7 @@ public class UserServiceImplTest {
 
         assertEquals(user, testUser);
 
-        verify(userRepository, times(1)).findByEmail(testUser.getEmail());
+        verify(userRepository, times(1)).findByEmailIgnoreCase(testUser.getEmail());
     }
 
     @Test
@@ -191,11 +193,13 @@ public class UserServiceImplTest {
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
-        when(imageService.uploadImage(multipartFile)).thenReturn(new Image());
+        when(imageService.uploadImage(multipartFile)).thenReturn(new Image(12, 123, "media", new byte[1]));
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.save(any())).thenReturn(testUser);
 
-        userService.updateUserImage(multipartFile);
+        String webPath = userService.updateUserImage(multipartFile);
+
+        assertEquals("/users/image/" + 12, webPath);
 
         verify(imageService, times(1)).uploadImage(any());
     }
