@@ -39,7 +39,6 @@ public class UserController {
     public ResponseEntity<CreateUserDto> addUser(@Valid @RequestBody CreateUserDto createUserDto) {
 
         User user = userService.createUser(userMapper.createUserDtoToEntity(createUserDto));
-
         return ResponseEntity.ok(userMapper.toCreateUserDto(user));
     }
 
@@ -47,6 +46,7 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         printLogInfo("updateUser", "patch", "/me");
+
         return ResponseEntity.ok(userMapper.toDto(userService.updateUser(userDto)));
     }
 
@@ -80,11 +80,6 @@ public class UserController {
         return userMapper.toDto((userService.getUsers()));
     }
 
-    private void printLogInfo(String name, String requestMethod, String path) {
-        logger.info("Вызван метод " + name + ", адрес "
-                + requestMethod.toUpperCase() + " запроса /users" + path);
-    }
-
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getImageById(@PathVariable("id") int id) {
         printLogInfo("getImageOfUser", "get", "/image/{id}");
@@ -100,5 +95,10 @@ public class UserController {
         UserDto userDto = userMapper.toDto(userService.updateRole(id, role));
 
         return ResponseEntity.ok(userDto);
+    }
+
+    private void printLogInfo(String name, String requestMethod, String path) {
+        logger.info("Вызван метод " + name + ", адрес "
+                + requestMethod.toUpperCase() + " запроса /users" + path);
     }
 }
