@@ -13,22 +13,19 @@ import static ru.skypro.homework.constant.Regexp.PHONE_REGEXP;
 
 @Data
 public class CreateUserDto {
+
     @Email(regexp = EMAIL_REGEXP)
     @Schema(example = "user@user.ru")
     private String email;
-
     @NotBlank
     @Size(min = 3)
     private String firstName;
-
     @NotBlank
     @Size(min = 3)
     private String lastName;
-
     @NotBlank
     @Size(min = 8)
     private String password;
-
     @Pattern(regexp = PHONE_REGEXP)
     private String phone;
 }

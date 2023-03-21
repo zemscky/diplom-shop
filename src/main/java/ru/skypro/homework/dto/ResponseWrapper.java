@@ -12,14 +12,11 @@ public class ResponseWrapper<T> {
 
     public static <T> ResponseWrapper<T> of(Collection<T> results) {
         ResponseWrapper<T> responseWrapper = new ResponseWrapper<>();
-
         if (results == null) {
             return responseWrapper;
         }
-
         responseWrapper.results = results;
         responseWrapper.count = results.size();
-
         return responseWrapper;
     }
 }

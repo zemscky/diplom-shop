@@ -1,6 +1,5 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -18,11 +17,8 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private long fileSize;
-
     private String mediaType;
-
     @Lob
     @Type(type = "binary")
     private byte[] data;
@@ -30,5 +26,4 @@ public class Image {
     public String toString() {
         return "Ads(id=" + this.getId() + ", image=" + Arrays.toString((this.getData())) + ")";
     }
-
 }

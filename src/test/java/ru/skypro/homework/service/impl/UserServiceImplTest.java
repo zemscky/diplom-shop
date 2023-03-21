@@ -83,7 +83,7 @@ public class UserServiceImplTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
 
-        User user = userService.getUsers();
+        User user = userService.getUser();
 
         assertEquals(user, testUser);
 

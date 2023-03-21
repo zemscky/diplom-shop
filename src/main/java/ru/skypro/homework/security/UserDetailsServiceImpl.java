@@ -29,22 +29,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserDetailsPa
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByUsername(username);
-
         return new MyUserDetails(user);
     }
 
     @Override
     public UserDetails updatePassword(UserDetails userDetails, String newPassword) {
         User user = getUserByUsername(userDetails.getUsername());
-
         user.setPassword(newPassword);
-
         MyUserDetails updatedUserDetails = new MyUserDetails(userRepository.save(user));
-
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(updatedUserDetails, null, updatedUserDetails.getAuthorities())
         );
-
         return updatedUserDetails;
     }
 
