@@ -75,7 +75,7 @@ ___
 After completing all the steps, the website will be available at http://localhost:3000 and Swagger by [link](http://localhost:8080/swagger-ui/index.html#).
 
 ___
-## Visual demonstration of the website
+## Demonstration of the work of the backend part of the site in Java:
 [Link to demo](https://drive.google.com/file/d/1ZqMeRTkz1IGSeoliSiXfAD7vRaj7R7N-/view?usp=sharing)
 
 https://user-images.githubusercontent.com/113126626/226187107-16063a15-95e6-4963-9a6a-331884c54cfc.mp4
