@@ -8,6 +8,7 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.security.MyUserDetails;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -19,7 +20,8 @@ public class TestConstants {
     public static final String DESCRIPTION = "description";
     public static final int PRICE = 10;
     public static final String TITLE = "title";
-    public static final String IMAGE_STRING = "/ads/image/1";
+    public static final String USER_IMAGE_STRING = "/ads/image/1";
+    public static final String ADS_IMAGE_STRING = "/ads/image/2";
     public static final Image IMAGE;
 
     static {
@@ -33,6 +35,8 @@ public class TestConstants {
     public static final User USER = new User(ID, "fn", "ln", "test@email.com",
             "password", "phone", "city", Instant.now(),
             IMAGE, Role.USER);
+
+    public static final MyUserDetails MY_USER_DETAILS = new MyUserDetails(USER);
 
     public static final JSONObject CREATE_ADS_DTO_JSON = new JSONObject();
 
@@ -51,7 +55,7 @@ public class TestConstants {
     static {
         ADS_DTO.setPk(ID);
         ADS_DTO.setAuthor(ID);
-        ADS_DTO.setImage(IMAGE_STRING);
+        ADS_DTO.setImage(USER_IMAGE_STRING);
         ADS_DTO.setPrice(PRICE);
         ADS_DTO.setTitle(TITLE);
         ADS_DTO.setDescription(DESCRIPTION);

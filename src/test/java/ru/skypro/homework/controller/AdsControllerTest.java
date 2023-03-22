@@ -3,11 +3,12 @@ package ru.skypro.homework.controller;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockPart;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,6 +17,7 @@ import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.security.SecurityUtils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,8 +35,7 @@ public class AdsControllerTest {
     MockMvc mockMvc;
     @Autowired
     AdsController adsController;
-//    MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class);
-
+    MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class);
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -49,28 +50,26 @@ public class AdsControllerTest {
         Assertions.assertThat(adsController).isNotNull();
     }
 
-//    @BeforeEach
-//    void setUp() {
-//        userRepository.save(USER);
-//        imageRepository.save(IMAGE);
-//    }
+    @BeforeEach
+    void setUp() {
+        imageRepository.save(IMAGE);
+        userRepository.save(USER);
+        mockedStatic.when(SecurityUtils::getUserDetailsFromContext).thenReturn(MY_USER_DETAILS);
+        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
+        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
+        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
+    }
 
     @Test
     void getAllAds() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/ads"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(0))
+                .andExpect(jsonPath("$.results").isEmpty());
     }
 
     @Test
-    @WithMockUser(username = "test@email.com")
     void addAds() throws Exception {
-//        doReturn(ADS).when(adsMapper).toEntity(any(CreateAdsDto.class));
-//        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
-//        doReturn(Optional.of(USER)).when(userRepository).findById(anyLong());
-//        doReturn(IMAGE).when(imageRepository).save(any(Image.class));
-//        doReturn(ADS).when(adsRepository).save(any(Ads.class));
-//        doReturn(ADS_DTO).when(adsMapper).toDto(any(Ads.class));
-
         mockMvc.perform(multipart("/ads")
                         .file(IMAGE_FILE)
                         .part(new MockPart("properties", CREATE_ADS_DTO_JSON.toString().getBytes()))
@@ -79,7 +78,7 @@ public class AdsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").value(ID))
                 .andExpect(jsonPath("$.author").value(ID))
-                .andExpect(jsonPath("$.image").value(IMAGE_STRING))
+                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
                 .andExpect(jsonPath("$.price").value(PRICE))
                 .andExpect(jsonPath("$.title").value(TITLE))
                 .andDo(print());
