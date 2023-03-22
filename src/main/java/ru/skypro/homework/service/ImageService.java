@@ -32,5 +32,5 @@ public interface ImageService {
      * @param image image file
      * @return ResponseEntity<byte [ ]>
      */
-    ResponseEntity<byte[]> updateAdsImage(long id, MultipartFile image);
+
 }
