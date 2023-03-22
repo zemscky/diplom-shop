@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -38,7 +39,7 @@ public class AdsControllerTest {
     MockMvc mockMvc;
     @Autowired
     AdsController adsController;
-    MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class);
+    static MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class);
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -53,13 +54,16 @@ public class AdsControllerTest {
         Assertions.assertThat(adsController).isNotNull();
     }
 
+    @BeforeAll
+    static void staticMockSetUp() {
+        mockedStatic.when(SecurityUtils::getUserDetailsFromContext).thenReturn(MY_USER_DETAILS);
+        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
+    }
+
     @BeforeEach
     void setUp() {
         imageRepository.save(USER_IMAGE);
         userRepository.save(USER);
-
-        mockedStatic.when(SecurityUtils::getUserDetailsFromContext).thenReturn(MY_USER_DETAILS);
-        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
     }
 
     @Test
