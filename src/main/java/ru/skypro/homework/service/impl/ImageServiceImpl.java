@@ -35,5 +35,10 @@ public class ImageServiceImpl implements ImageService {
                 () -> new NotFoundException("Image with id " + id + " not found!"));
     }
 
+    @Override
+    public void remove(Image image) {
+        imageRepository.delete(image);
+    }
+
 
 }
