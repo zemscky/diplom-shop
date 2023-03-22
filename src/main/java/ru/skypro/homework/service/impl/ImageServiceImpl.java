@@ -22,12 +22,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image uploadImage(MultipartFile imageFile) throws IOException {
         Image image = new Image();
-
         image.setData(imageFile.getBytes());
         image.setFileSize(imageFile.getSize());
         image.setMediaType(imageFile.getContentType());
         image.setData(imageFile.getBytes());
-
         return imageRepository.save(image);
     }
 
@@ -43,13 +41,10 @@ public class ImageServiceImpl implements ImageService {
         if (image == null) {
             throw new NotFoundException("New ad image not uploaded");
         }
-
         Image img = getImageById(id);
-
         img.setFileSize(image.getSize());
         img.setMediaType(image.getContentType());
         img.setData(image.getBytes());
-
         return ResponseEntity.ok(imageRepository.save(img).getData());
     }
 }

@@ -7,6 +7,7 @@ import ru.skypro.homework.entity.Image;
 import java.io.IOException;
 
 public interface ImageService {
+
     /**
      * Saving an image to the database
      *

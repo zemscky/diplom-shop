@@ -21,7 +21,6 @@ import ru.skypro.homework.entity.User;
 
 import javax.validation.Valid;
 
-
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class UserController {
     @Operation(summary = "addUser", description = "addUser")
     @PostMapping
     public ResponseEntity<CreateUserDto> addUser(@Valid @RequestBody CreateUserDto createUserDto) {
-
+        printLogInfo("addUser", "post", "/users");
         User user = userService.createUser(userMapper.createUserDtoToEntity(createUserDto));
         return ResponseEntity.ok(userMapper.toCreateUserDto(user));
     }
@@ -46,7 +45,6 @@ public class UserController {
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         printLogInfo("updateUser", "patch", "/me");
-
         return ResponseEntity.ok(userMapper.toDto(userService.updateUser(userDto)));
     }
 
@@ -65,19 +63,19 @@ public class UserController {
         return ResponseEntity.ok().body(userService.updateUserImage(image));
     }
 
-    @Operation(summary = "getUser", description = "getUser")
+    @Operation(summary = "getUserById", description = "getUserById")
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") long id) {
         User user = userService.getUserById(id);
-        printLogInfo("getUser", "get", "/id");
+        printLogInfo("getUserById", "get", "/id");
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    @Operation(summary = "getUsers", description = "Get info about me")
+    @Operation(summary = "getUser", description = "Get info about me")
     @GetMapping("/me")
-    public UserDto getUsers() {
-        printLogInfo("getUsers", "get", "/me");
-        return userMapper.toDto((userService.getUsers()));
+    public UserDto getUser() {
+        printLogInfo("getUser", "get", "/me");
+        return userMapper.toDto((userService.getUser()));
     }
 
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
@@ -91,9 +89,7 @@ public class UserController {
     @PutMapping("/{id}/updateRole")
     public ResponseEntity<UserDto> updateRole(@PathVariable("id") long id, Role role) {
         printLogInfo("updateAdsImage", "patch", "/id");
-
         UserDto userDto = userMapper.toDto(userService.updateRole(id, role));
-
         return ResponseEntity.ok(userDto);
     }
 

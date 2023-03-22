@@ -25,7 +25,6 @@ import static ru.skypro.homework.dto.Role.USER;
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
     private final AuthService authService;
 
     @Operation(summary = "login", description = "login")
