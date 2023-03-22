@@ -8,9 +8,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AdsDto {
 
-    private int author;
+    private long author;
     private String image;
-    private int pk;
+    private long pk;
     private int price;
     @NotBlank
     private String title;
