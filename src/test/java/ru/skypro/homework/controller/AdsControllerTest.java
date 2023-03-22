@@ -19,6 +19,7 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUtils;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,9 +55,8 @@ public class AdsControllerTest {
     void setUp() {
         imageRepository.save(IMAGE);
         userRepository.save(USER);
+
         mockedStatic.when(SecurityUtils::getUserDetailsFromContext).thenReturn(MY_USER_DETAILS);
-        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
-        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
         mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
     }
 
@@ -85,7 +85,11 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getAdsMe() {
+    void getAdsMe() throws Exception {
+        mockMvc.perform(get("/ads/me"))
+                .andDo(print())
+                .andExpect(jsonPath("$.count").value(0))
+                .andExpect(jsonPath("$.results").isEmpty());
     }
 
     @Test
