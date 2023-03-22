@@ -1,6 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,11 +23,8 @@ import java.time.Instant;
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-
     private final PasswordEncoder encoder;
-
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
 
     @Override
@@ -36,23 +34,21 @@ public class AuthServiceImpl implements AuthService {
             String encryptedPassword = userDetails.getPassword();
             return encoder.matches(password, encryptedPassword);
         } catch (UsernameNotFoundException e) {
-            return false;
+            throw new BadCredentialsException(String.format("User \"%s\" does not exist!", userName));
+        } catch (IllegalArgumentException e) {
+            throw new BadCredentialsException("Wrong password!");
         }
     }
 
     @Override
     public boolean register(RegisterReqDto registerReqDto, Role role) {
         User user = userMapper.toEntity(registerReqDto);
-
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
-            throw new ValidationException(String.format("Пользователь \"%s\" уже зарегистрирован!", user.getEmail()));
+            throw new ValidationException(String.format("User \"%s\" is already registered!", user.getEmail()));
         }
-
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRegDate(Instant.now());
-
         userRepository.save(user);
-
         return true;
     }
 }

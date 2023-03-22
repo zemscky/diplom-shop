@@ -15,25 +15,18 @@ import static ru.skypro.homework.constant.Regexp.PHONE_REGEXP;
 public class UserDto {
 
     private long id;
-
     @NotBlank
     @Size(min = 3)
     private String firstName;
-
     @NotBlank
     @Size(min = 3)
     private String lastName;
-
     @Email(regexp = EMAIL_REGEXP)
     @Schema(example = "user@user.ru")
     private String email;
-
     @Pattern(regexp = PHONE_REGEXP)
     private String phone;
-
     private String city;
-
     private String regDate;
-
     private String image;
 }

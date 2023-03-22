@@ -1,12 +1,12 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import ru.skypro.homework.dto.*;
+import org.webjars.NotFoundException;
+import ru.skypro.homework.dto.AdsCommentDto;
+import ru.skypro.homework.dto.CreateAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.AdsComment;
 import ru.skypro.homework.entity.User;
@@ -54,7 +54,7 @@ public class AdsServiceImpl implements AdsService {
     @SneakyThrows
     @Override
     public Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFile) {
-        Ads ads = adsMapper.toEntity(createAdsDto); //передали title, description, price
+        Ads ads = adsMapper.toEntity(createAdsDto);
         User user = userService.getUserById(getUserIdFromContext());
         ads.setAuthor(user);
         ads.setImage(imageService.uploadImage(imageFile));
@@ -68,8 +68,7 @@ public class AdsServiceImpl implements AdsService {
 
     public Ads getAdsById(Long adId) {
         return adsRepository.findById(adId).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "The ad was not found"));
+                () -> new NotFoundException("Ad with id " + adId + " not found!"));
     }
 
     public Ads removeAdsById(Long adId) {
@@ -82,11 +81,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsComment getAdsComment(long adPk, long id) {
-        AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Комментарий с id %d, " +
-                        "принадлежащий объявлению с id %d не найден!", id, adPk)));
-        return adsComment;
+        return adsCommentRepository.findByIdAndAdId(id, adPk)
+                .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d " +
+                        "belonging to ad with id %d not found!", id, adPk)));
     }
 
     @Override
@@ -97,61 +94,48 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
         AdsComment adsComment = adsCommentMapper.toEntity(adsCommentDto);
-
         User user = userService.getUserById(getUserIdFromContext());
-
         adsComment.setAuthor(user);
         adsComment.setAd(getAdsById(adPk));
         adsComment.setCreatedAt(Instant.now());
-
         return adsCommentRepository.save(adsComment);
     }
 
     @Override
     public AdsComment deleteAdsComment(long adPk, long id) {
         AdsComment comment = getAdsComment(adPk, id);
-
         checkPermissionToAdsComment(comment);
-
         adsCommentRepository.delete(comment);
-
         return comment;
     }
 
     @Override
-    public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
+    public AdsComment updateComments(long adPk, long id, AdsComment adsCommentUpdated) {
         AdsComment adsComment = getAdsComment(adPk, id);
-
         SecurityUtils.checkPermissionToAdsComment(adsComment);
-
         adsComment.setText(adsCommentUpdated.getText());
-
         return adsCommentRepository.save(adsComment);
     }
 
     @Override
     @SneakyThrows
     public void updateAdsImage(long id, MultipartFile image) {
+        if (image == null) {
+            throw new NotFoundException("New ad image not uploaded");
+        }
         Ads ads = getAdsById(id);
-
         checkPermissionToAds(ads);
-
         ads.setImage(imageService.uploadImage(image));
-
         adsRepository.save(ads);
     }
 
     @Override
     public Ads updateAds(Long adId, CreateAdsDto createAdsDto) {
         Ads ads = getAdsById(adId);
-
         checkPermissionToAds(ads);
-
         ads.setTitle(createAdsDto.getTitle());
         ads.setDescription(createAdsDto.getDescription());
         ads.setPrice(createAdsDto.getPrice());
-
         return adsRepository.save(ads);
     }
-
 }

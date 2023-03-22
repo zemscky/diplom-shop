@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
 public interface UserService {
+
     /**
      * Create User
      *
@@ -13,6 +14,7 @@ public interface UserService {
      * @return User Created User
      */
     User createUser(User user);
+
     /**
      * Get all users from repository
      * and return them all
@@ -20,9 +22,11 @@ public interface UserService {
      * @return Collection<User>
      */
 
-    User getUsers();
+    User getUser();
+
     /**
      * Get user by ID
+     *
      * @param id ID user
      */
     User getUserById(long id);
@@ -36,10 +40,10 @@ public interface UserService {
     User updateUser(UserDto userDto);
 
     /**
-     * Изменение пароля пользователя
+     * Changing the user's password
      *
-     * @param newPassword     новый пароль
-     * @param currentPassword старый пароль
+     * @param newPassword     New Password
+     * @param currentPassword Current Password
      */
     void newPassword(String newPassword, String currentPassword);
 
@@ -47,15 +51,15 @@ public interface UserService {
      * Updates users image
      *
      * @param image new image
-     * @return
+     * @return images path
      */
     String updateUserImage(MultipartFile image);
 
     /**
-     * Изменение роли пользователя
+     * Changing a user's role
      *
-     * @param id   идентификатор пользователя
-     * @param role новая роль
+     * @param id   identifier User
+     * @param role New Role
      */
     User updateRole(long id, Role role);
 }
