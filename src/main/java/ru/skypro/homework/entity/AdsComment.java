@@ -16,9 +16,7 @@ public class AdsComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private Instant createdAt;
-
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,5 +26,4 @@ public class AdsComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_ads")
     private Ads ad;
-
 }

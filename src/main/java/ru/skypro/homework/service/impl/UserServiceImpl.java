@@ -35,10 +35,10 @@ public class UserServiceImpl implements UserService {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    public User getUsers() {
+    public User getUser() {
         return userRepository.findByEmailIgnoreCase(SecurityUtils.
-                getUserDetailsFromContext().getUsername()).
-                orElseThrow(()-> new NotFoundException(String.format("User with email \"%s\" not found!",
+                        getUserDetailsFromContext().getUsername()).
+                orElseThrow(() -> new NotFoundException(String.format("User with email \"%s\" not found!",
                         getUserDetailsFromContext().getUsername())));
     }
 
@@ -52,11 +52,9 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ValidationException(String.format("User \"%s\" already exists!", user.getEmail()));
         }
-
         if (user.getRole() == null) {
             user.setRole(USER);
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRegDate(Instant.now());
         return userRepository.save(user);
@@ -65,23 +63,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserDto userDto) {
         User user = getUserById(getUserDetailsFromContext().getId());
-
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setPhone(userDto.getPhone());
-
         return userRepository.save(user);
     }
 
     @Override
     public void newPassword(String newPassword, String currentPassword) {
-
         UserDetails userDetails = getUserDetailsFromContext();
-
         if (!passwordEncoder.matches(currentPassword, userDetails.getPassword())) {
             throw new BadCredentialsException("The current password is incorrect!");
         }
-
         userDetailsService.updatePassword(userDetails, passwordEncoder.encode(newPassword));
     }
 
@@ -100,5 +93,4 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
-
 }

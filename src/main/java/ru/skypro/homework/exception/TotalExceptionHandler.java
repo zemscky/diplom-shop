@@ -26,7 +26,6 @@ public class TotalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers,
                                                              HttpStatus httpStatus, WebRequest request) {
         logException(exception);
-
         return ResponseEntity.status(httpStatus)
                 .body(Optional.ofNullable(body)
                         .orElse(ErrorMessage.of(httpStatus, exception.getMessage(),
@@ -41,7 +40,6 @@ public class TotalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = exception.getFieldErrors().stream()
                 .map(fieldError -> String.format("%s (%s)", fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.joining("; ", "Некорректно указаны следующие поля: ", ""));
-
         return handleException(exception, HttpStatus.BAD_REQUEST, message, request);
     }
 
@@ -78,7 +76,6 @@ public class TotalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static void logException(Exception exception) {
         log.error(exception.getMessage());
-
         if (log.isTraceEnabled()) {
             exception.printStackTrace();
         }

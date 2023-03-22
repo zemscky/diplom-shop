@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
@@ -29,6 +28,7 @@ public interface AdsService {
      * Finds an Ads instance in the repository by its id and converts it into
      * a FullAdsDto instance. The purpose is to provide the user with the
      * full information on the chosen advertisement.
+     *
      * @param adId Ads id
      * @return ResponseEntity<FullAdsDto>
      */
@@ -46,24 +46,24 @@ public interface AdsService {
     /**
      * Deletes ad by ad ID
      *
-     * @param   adId  Ad ID
-     * @return  ResponseEntity<Void>
+     * @param adId Ad ID
+     * @return ResponseEntity<Void>
      */
     Ads removeAdsById(Long adId);
 
     /**
      * Getting a comment by ID
      *
-     * @param id    Comment ID
-     * @param adPk  Ad ID
-     * @return      Found comment
+     * @param id   Comment ID
+     * @param adPk Ad ID
+     * @return Found comment
      */
     AdsComment getAdsComment(long adPk, long id);
 
     /**
      * Getting all comments by ad ID
      *
-     * @param  adPk Ad ID
+     * @param adPk Ad ID
      * @return Collection<AdsComment>
      */
     Collection<AdsComment> getComments(long adPk);
@@ -98,20 +98,20 @@ public interface AdsService {
     /**
      * Changing the comment by ID
      *
-     * @param id            Comment id
-     * @param adPk          Ad id
-     * @param adsComment    Modified comment
+     * @param id         Comment id
+     * @param adPk       Ad id
+     * @param adsComment Modified comment
      * @return Modified comment
      */
-    AdsComment updateComments(int adPk, int id, AdsComment adsComment);
+    AdsComment updateComments(long adPk, long id, AdsComment adsComment);
 
     /**
      * Updates Image instance`s info (fields: fileSize, mediaType, data).
      * The purpose is to replace an old image for an ad on the website with a new one.
      *
-     * @param id Image instance`s id
+     * @param id    Image instance`s id
      * @param image image file
-     * @return ResponseEntity<byte[]>
+     * @return ResponseEntity<byte [ ]>
      */
     void updateAdsImage(long id, MultipartFile image);
 }

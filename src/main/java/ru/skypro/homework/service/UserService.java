@@ -6,6 +6,7 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
 public interface UserService {
+
     /**
      * Create User
      *
@@ -21,7 +22,7 @@ public interface UserService {
      * @return Collection<User>
      */
 
-    User getUsers();
+    User getUser();
 
     /**
      * Get user by ID
@@ -50,7 +51,7 @@ public interface UserService {
      * Updates users image
      *
      * @param image new image
-     * @return
+     * @return images path
      */
     String updateUserImage(MultipartFile image);
 

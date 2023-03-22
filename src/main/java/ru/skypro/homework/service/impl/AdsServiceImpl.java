@@ -81,10 +81,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsComment getAdsComment(long adPk, long id) {
-        AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
+        return adsCommentRepository.findByIdAndAdId(id, adPk)
                 .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d " +
                         "belonging to ad with id %d not found!", id, adPk)));
-        return adsComment;
     }
 
     @Override
@@ -95,35 +94,26 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto) {
         AdsComment adsComment = adsCommentMapper.toEntity(adsCommentDto);
-
         User user = userService.getUserById(getUserIdFromContext());
-
         adsComment.setAuthor(user);
         adsComment.setAd(getAdsById(adPk));
         adsComment.setCreatedAt(Instant.now());
-
         return adsCommentRepository.save(adsComment);
     }
 
     @Override
     public AdsComment deleteAdsComment(long adPk, long id) {
         AdsComment comment = getAdsComment(adPk, id);
-
         checkPermissionToAdsComment(comment);
-
         adsCommentRepository.delete(comment);
-
         return comment;
     }
 
     @Override
-    public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
+    public AdsComment updateComments(long adPk, long id, AdsComment adsCommentUpdated) {
         AdsComment adsComment = getAdsComment(adPk, id);
-
         SecurityUtils.checkPermissionToAdsComment(adsComment);
-
         adsComment.setText(adsCommentUpdated.getText());
-
         return adsCommentRepository.save(adsComment);
     }
 
@@ -133,27 +123,19 @@ public class AdsServiceImpl implements AdsService {
         if (image == null) {
             throw new NotFoundException("New ad image not uploaded");
         }
-
         Ads ads = getAdsById(id);
-
         checkPermissionToAds(ads);
-
         ads.setImage(imageService.uploadImage(image));
-
         adsRepository.save(ads);
     }
 
     @Override
     public Ads updateAds(Long adId, CreateAdsDto createAdsDto) {
         Ads ads = getAdsById(adId);
-
         checkPermissionToAds(ads);
-
         ads.setTitle(createAdsDto.getTitle());
         ads.setDescription(createAdsDto.getDescription());
         ads.setPrice(createAdsDto.getPrice());
-
         return adsRepository.save(ads);
     }
-
 }

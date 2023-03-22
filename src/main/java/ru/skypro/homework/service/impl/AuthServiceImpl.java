@@ -23,11 +23,8 @@ import java.time.Instant;
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-
     private final PasswordEncoder encoder;
-
     private final UserRepository userRepository;
-
     private final UserMapper userMapper;
 
     @Override
@@ -46,16 +43,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(RegisterReqDto registerReqDto, Role role) {
         User user = userMapper.toEntity(registerReqDto);
-
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ValidationException(String.format("User \"%s\" is already registered!", user.getEmail()));
         }
-
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRegDate(Instant.now());
-
         userRepository.save(user);
-
         return true;
     }
 }

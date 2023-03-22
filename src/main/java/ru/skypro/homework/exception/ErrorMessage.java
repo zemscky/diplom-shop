@@ -12,11 +12,8 @@ import java.time.LocalDateTime;
 public class ErrorMessage {
 
     private final int statusCode;
-
     private final LocalDateTime errorTime;
-
     private final String message;
-
     private final String description;
 
     private ErrorMessage(HttpStatus httpStatus, String message, String description) {

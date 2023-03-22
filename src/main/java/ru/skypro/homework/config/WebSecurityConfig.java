@@ -37,7 +37,6 @@ public class WebSecurityConfig {
                         "select email as username, password, 'true' from users where email=?")
                 .authoritiesByUsernameQuery(
                         "select email as username, authority from users where email=?");
-
         return auth;
     }
 
@@ -61,7 +60,5 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }
 

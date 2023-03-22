@@ -9,12 +9,10 @@ import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Mapper(componentModel = "spring")
 public interface AdsMapper extends WebMapper<AdsDto, Ads> {
-    String ADS_IMAGES = "/ads/images/";
+
+    String ADS_IMAGES = "/ads/image/";
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author.id", source = "author")
@@ -23,7 +21,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "image", source = "entity.image", qualifiedByName = "imageMapping")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
     AdsDto toDto(Ads entity);
 
     @Mapping(target = "id", ignore = true)
@@ -35,7 +33,7 @@ public interface AdsMapper extends WebMapper<AdsDto, Ads> {
     @Mapping(target = "authorLastName", source = "author.lastName")
     @Mapping(target = "phone", source = "author.phone")
     @Mapping(target = "email", source = "author.email")
-    @Mapping(target = "image", source = "entity.image", qualifiedByName = "imageMapping")
+    @Mapping(target = "image", source = "image", qualifiedByName = "imageMapping")
     @Mapping(target = "pk", source = "id")
     FullAdsDto toFullAdsDto(Ads entity);
 
