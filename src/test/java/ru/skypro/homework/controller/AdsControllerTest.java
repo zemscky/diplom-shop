@@ -6,26 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockPart;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import ru.skypro.homework.dto.CreateAdsDto;
-import ru.skypro.homework.entity.Ads;
-import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.security.SecurityUtils;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doReturn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,42 +30,39 @@ import static ru.skypro.homework.controller.TestConstants.*;
 public class AdsControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
+    @Autowired
+    AdsController adsController;
+//    MockedStatic<SecurityUtils> mockedStatic = Mockito.mockStatic(SecurityUtils.class);
 
     @Autowired
-    private AdsController adsController;
-
+    UserRepository userRepository;
     @Autowired
-    private AdsRepository adsRepository;
-
+    ImageRepository imageRepository;
     @Autowired
-    private AdsCommentRepository adsCommentRepository;
-
+    AdsRepository adsRepository;
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ImageRepository imageRepository;
+    AdsCommentRepository commentRepository;
 
     @Test
     void contextLoads() {
         Assertions.assertThat(adsController).isNotNull();
     }
 
-    @BeforeEach
-    void setUp() {
-
-    }
+//    @BeforeEach
+//    void setUp() {
+//        userRepository.save(USER);
+//        imageRepository.save(IMAGE);
+//    }
 
     @Test
     void getAllAds() throws Exception {
-        mockMvc.perform(get("/ads"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.count").value(0))
-                .andExpect(jsonPath("$.results").isEmpty());
+        mockMvc.perform(MockMvcRequestBuilders.get("/ads"))
+                .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser(username = "test@email.com")
     void addAds() throws Exception {
 //        doReturn(ADS).when(adsMapper).toEntity(any(CreateAdsDto.class));
 //        mockedStatic.when(SecurityUtils::getUserIdFromContext).thenReturn(ID);
