@@ -18,9 +18,11 @@ public class Ads {
     private String title;
     private String description;
     private int price;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
+
     @OneToOne()
     @JoinColumn()
     private Image image;

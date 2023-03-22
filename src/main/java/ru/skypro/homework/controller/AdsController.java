@@ -15,14 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.mapper.AdsCommentMapper;
 import ru.skypro.homework.mapper.AdsMapper;
-import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.AdsService;
 import ru.skypro.homework.service.ImageService;
-import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -34,10 +31,8 @@ public class AdsController {
     private static final Logger logger = LoggerFactory.getLogger(AdsController.class);
     private final AdsService adsService;
     private final ImageService imageService;
-    private final UserService userService;
     private final AdsCommentMapper adsCommentMapper;
     private final AdsMapper adsMapper;
-    private final UserMapper userMapper;
 
     @Operation(summary = "getAllAds", description = "getAllAds")
     @GetMapping
@@ -138,8 +133,7 @@ public class AdsController {
     }
 
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<byte[]> getAdsImage(@PathVariable("id") long id,
-                                              @NotNull @RequestBody MultipartFile image) {
+    public ResponseEntity<byte[]> getAdsImage(@PathVariable("id") long id) {
         printLogInfo("updateAdsImage", "patch", "/id");
         return ResponseEntity.ok(imageService.getImageById(id).getData());
     }

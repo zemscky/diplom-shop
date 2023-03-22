@@ -9,12 +9,10 @@ import ru.skypro.homework.dto.FullAdsDto;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Mapper(componentModel = "spring")
 public interface AdsMapper extends WebMapper<AdsDto, Ads> {
-    String ADS_IMAGES = "/ads/images/";
+
+    String ADS_IMAGES = "/ads/image/";
 
     @Mapping(target = "id", source = "pk")
     @Mapping(target = "author.id", source = "author")

@@ -103,7 +103,7 @@ public interface AdsService {
      * @param adsComment Modified comment
      * @return Modified comment
      */
-    AdsComment updateComments(int adPk, int id, AdsComment adsComment);
+    AdsComment updateComments(long adPk, long id, AdsComment adsComment);
 
     /**
      * Updates Image instance`s info (fields: fileSize, mediaType, data).

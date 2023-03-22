@@ -19,6 +19,7 @@ public class Image {
     private long id;
     private long fileSize;
     private String mediaType;
+
     @Lob
     @Type(type = "binary")
     private byte[] data;

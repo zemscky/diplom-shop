@@ -25,8 +25,10 @@ public class User {
     private String phone;
     private String city;
     private Instant regDate;
+
     @OneToOne()
     private Image image;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 }

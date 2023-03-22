@@ -21,7 +21,6 @@ import ru.skypro.homework.entity.User;
 
 import javax.validation.Valid;
 
-
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor

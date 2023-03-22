@@ -81,10 +81,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public AdsComment getAdsComment(long adPk, long id) {
-        AdsComment adsComment = adsCommentRepository.findByIdAndAdId(id, adPk)
+        return adsCommentRepository.findByIdAndAdId(id, adPk)
                 .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d " +
                         "belonging to ad with id %d not found!", id, adPk)));
-        return adsComment;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsComment updateComments(int adPk, int id, AdsComment adsCommentUpdated) {
+    public AdsComment updateComments(long adPk, long id, AdsComment adsCommentUpdated) {
         AdsComment adsComment = getAdsComment(adPk, id);
         SecurityUtils.checkPermissionToAdsComment(adsComment);
         adsComment.setText(adsCommentUpdated.getText());
