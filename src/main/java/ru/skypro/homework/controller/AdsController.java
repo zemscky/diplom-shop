@@ -104,7 +104,7 @@ public class AdsController {
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateAdsImage(@PathVariable("id") long id,
                                             @NotNull @RequestBody MultipartFile image) {
-        printLogInfo("updateAdsImage", "patch", "/id");
+        printLogInfo("patch", "/" + id, "updateAdsImage");
         adsService.updateAdsImage(id, image);
         return ResponseEntity.ok().build();
     }

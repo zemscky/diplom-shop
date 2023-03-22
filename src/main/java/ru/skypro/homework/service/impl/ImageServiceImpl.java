@@ -35,16 +35,10 @@ public class ImageServiceImpl implements ImageService {
                 () -> new NotFoundException("Image with id " + id + " not found!"));
     }
 
-    @SneakyThrows
     @Override
-    public ResponseEntity<byte[]> updateAdsImage(long id, MultipartFile image) {
-        if (image == null) {
-            throw new NotFoundException("New ad image not uploaded");
-        }
-        Image img = getImageById(id);
-        img.setFileSize(image.getSize());
-        img.setMediaType(image.getContentType());
-        img.setData(image.getBytes());
-        return ResponseEntity.ok(imageRepository.save(img).getData());
+    public void remove(Image image) {
+        imageRepository.delete(image);
     }
+
+
 }
