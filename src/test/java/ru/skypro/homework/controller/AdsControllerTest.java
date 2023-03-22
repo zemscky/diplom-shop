@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.assertj.core.api.Assertions;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -8,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockPart;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,8 +22,7 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUtils;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +55,7 @@ public class AdsControllerTest {
 
     @BeforeEach
     void setUp() {
-        imageRepository.save(IMAGE);
+        imageRepository.save(USER_IMAGE);
         userRepository.save(USER);
 
         mockedStatic.when(SecurityUtils::getUserDetailsFromContext).thenReturn(MY_USER_DETAILS);
@@ -95,7 +96,22 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getFullAd() {
+    @WithMockUser
+    void getFullAd() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        mockMvc.perform(get("/ads/1"))
+                .andDo(print())
+                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
+                .andExpect(jsonPath("$.authorLastName").value(USER.getLastName()))
+                .andExpect(jsonPath("$.authorFirstName").value(USER.getFirstName()))
+                .andExpect(jsonPath("$.phone").value(USER.getPhone()))
+                .andExpect(jsonPath("$.price").value(ADS.getPrice()))
+                .andExpect(jsonPath("$.description").value(ADS.getDescription()))
+                .andExpect(jsonPath("$.pk").value(ADS.getId()))
+                .andExpect(jsonPath("$.title").value(ADS.getTitle()))
+                .andExpect(jsonPath("$.email").value(USER.getEmail()));
     }
 
     @Test
@@ -111,7 +127,25 @@ public class AdsControllerTest {
     }
 
     @Test
-    void updateAds() {
+    @WithMockUser
+    void updateAds() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        JSONObject createAdsDtoJson = new JSONObject();
+        createAdsDtoJson.put("description", "new description");
+        createAdsDtoJson.put("price", 20_000);
+        createAdsDtoJson.put("title", "new title");
+
+        mockMvc.perform(patch("/ads/1")
+                        .content(createAdsDtoJson.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(jsonPath("$.pk").value(ID))
+                .andExpect(jsonPath("$.author").value(ID))
+                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
+                .andExpect(jsonPath("$.price").value(20_000))
+                .andExpect(jsonPath("$.title").value("new title"));
     }
 
     @Test

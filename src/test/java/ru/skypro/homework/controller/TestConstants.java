@@ -20,13 +20,23 @@ public class TestConstants {
     public static final String DESCRIPTION = "description";
     public static final int PRICE = 10;
     public static final String TITLE = "title";
-    public static final String USER_IMAGE_STRING = "/ads/image/1";
+    public static final String USER_IMAGE_STRING = "/users/image/1";
     public static final String ADS_IMAGE_STRING = "/ads/image/2";
-    public static final Image IMAGE;
+    public static final Image USER_IMAGE;
 
     static {
         try {
-            IMAGE = new Image(ID, 12, "png", IMAGE_FILE.getBytes());
+            USER_IMAGE = new Image(ID, 12, "png", IMAGE_FILE.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final Image ADS_IMAGE;
+
+    static {
+        try {
+            ADS_IMAGE = new Image(2, 12, "png", IMAGE_FILE.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -34,7 +44,7 @@ public class TestConstants {
 
     public static final User USER = new User(ID, "fn", "ln", "test@email.com",
             "password", "phone", "city", Instant.now(),
-            IMAGE, Role.USER);
+            USER_IMAGE, Role.USER);
 
     public static final MyUserDetails MY_USER_DETAILS = new MyUserDetails(USER);
 
@@ -55,16 +65,11 @@ public class TestConstants {
     static {
         ADS_DTO.setPk(ID);
         ADS_DTO.setAuthor(ID);
-        ADS_DTO.setImage(USER_IMAGE_STRING);
+        ADS_DTO.setImage(ADS_IMAGE_STRING);
         ADS_DTO.setPrice(PRICE);
         ADS_DTO.setTitle(TITLE);
         ADS_DTO.setDescription(DESCRIPTION);
     }
 
-    public static final Ads ADS = new Ads(ID, TITLE, DESCRIPTION, PRICE, USER, IMAGE);
-
-
-
-
-
+    public static final Ads ADS = new Ads(ID, TITLE, DESCRIPTION, PRICE, USER, ADS_IMAGE);
 }
