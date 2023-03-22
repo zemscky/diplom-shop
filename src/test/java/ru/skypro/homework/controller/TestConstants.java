@@ -30,7 +30,7 @@ public class TestConstants {
         }
     }
 
-    public static final User USER = new User(ID, "fn", "ln", "email",
+    public static final User USER = new User(ID, "fn", "ln", "test@email.com",
             "password", "phone", "city", Instant.now(),
             IMAGE, Role.USER);
 
