@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.LoginReqDto;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
@@ -31,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@Transactional
 public class AuthControllerTest {
 
     @Autowired
@@ -78,8 +76,10 @@ public class AuthControllerTest {
     @Test
     public void testAuthenticateUser() throws Exception {
         User user = getMockUser();
-        LoginReqDto loginReq = new LoginReqDto(user.getEmail(), user.getPassword());
-        String json = mapper.writeValueAsString(loginReq);
+        LoginReqDto req = new LoginReqDto();
+        req.setUsername(user.getEmail());
+        req.setPassword(user.getPassword());
+        String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
@@ -92,8 +92,10 @@ public class AuthControllerTest {
     public void testAuthenticateUserAdmin() throws Exception {
         User user = getMockUser();
         user.setRole(Role.ADMIN);
-        LoginReqDto loginReq = new LoginReqDto(user.getEmail(), user.getPassword());
-        String json = mapper.writeValueAsString(loginReq);
+        LoginReqDto req = new LoginReqDto();
+        req.setUsername(user.getEmail());
+        req.setPassword(user.getPassword());
+        String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
@@ -105,8 +107,10 @@ public class AuthControllerTest {
     public void testAuthenticateUserWrongPassword() throws Exception {
         User user = getMockUser();
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(false);
-        LoginReqDto loginReq = new LoginReqDto(user.getEmail(), user.getPassword());
-        String json = mapper.writeValueAsString(loginReq);
+        LoginReqDto req = new LoginReqDto();
+        req.setUsername(user.getEmail());
+        req.setPassword(user.getPassword());
+        String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
@@ -117,14 +121,14 @@ public class AuthControllerTest {
     @Test
     public void testRegisterUser() throws Exception {
         User user = getMockUser();
-        RegisterReqDto registerReq = new RegisterReqDto(
-                user.getEmail(),
-                user.getPassword(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone(),
-                null);
-        String json = mapper.writeValueAsString(registerReq);
+        RegisterReqDto req = new RegisterReqDto();
+        req.setUsername(user.getEmail());
+        req.setPassword(user.getPassword());
+        req.setFirstName(user.getFirstName());
+        req.setLastName(user.getLastName());
+        req.setPhone(user.getPhone());
+        req.setRole(null);
+        String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
