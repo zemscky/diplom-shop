@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.security.MyUserDetails;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -42,11 +41,9 @@ public class TestConstants {
         }
     }
 
-    public static final User USER = new User(ID, "fn", "ln", "test@email.com",
+    public static final User USER = new User(ID, "fn", "ln", "user",
             "password", "phone", "city", Instant.now(),
             USER_IMAGE, Role.USER);
-
-    public static final MyUserDetails MY_USER_DETAILS = new MyUserDetails(USER);
 
     public static final JSONObject CREATE_ADS_DTO_JSON = new JSONObject();
 
