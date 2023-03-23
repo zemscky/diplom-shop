@@ -128,9 +128,11 @@ public class AdsControllerTest {
         adsRepository.save(ADS);
         commentRepository.save(ADS_COMMENT);
 
-        mockMvc.perform(get("/ads/1/comment/1"))
+        mockMvc.perform(get("/ads/1/comments/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pk").value(ADS_COMMENT.getId()))
+                .andExpect(jsonPath("$.author").value(ADS_COMMENT.getAuthor().getId()));
     }
 
     @Test
