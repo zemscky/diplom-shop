@@ -15,6 +15,7 @@ public interface UserMapper extends WebMapper<UserDto, User> {
     String ADS_IMAGES = "/users/image/";
 
     CreateUserDto toCreateUserDto(User entity);
+
     User createUserDtoToEntity(CreateUserDto dto);
 
     @Mapping(target = "role", defaultValue = "USER")
