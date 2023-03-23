@@ -36,7 +36,7 @@ public class UserController {
     @Operation(summary = "addUser", description = "addUser")
     @PostMapping
     public ResponseEntity<CreateUserDto> addUser(@Valid @RequestBody CreateUserDto createUserDto) {
-        printLogInfo("addUser", "post", "/users");
+        printLogInfo("addUser", "post", "");
         User user = userService.createUser(userMapper.createUserDtoToEntity(createUserDto));
         return ResponseEntity.ok(userMapper.toCreateUserDto(user));
     }
