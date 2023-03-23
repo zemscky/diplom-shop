@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ads;
@@ -22,7 +23,7 @@ public interface AdsService {
      *
      * @return ResponseWrapper<AdsDto>
      */
-    Collection<Ads> getAdsMe();
+    Collection<Ads> getAdsMe(Authentication authentication);
 
     /**
      * Finds an Ads instance in the repository by its id and converts it into
@@ -37,11 +38,12 @@ public interface AdsService {
     /**
      * Creates an ad based on CreateAdsDto and an photo
      *
-     * @param createAdsDto Ad model Dto with title, description and price
-     * @param imageFiles   Ad photos
+     * @param createAdsDto   Ad model Dto with title, description and price
+     * @param imageFiles     Ad photos
+     * @param authentication
      * @return AdsDto
      */
-    Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFiles);
+    Ads addAds(CreateAdsDto createAdsDto, MultipartFile imageFiles, Authentication authentication);
 
     /**
      * Deletes ad by ad ID
@@ -49,7 +51,7 @@ public interface AdsService {
      * @param adId Ad ID
      * @return ResponseEntity<Void>
      */
-    Ads removeAdsById(Long adId);
+    Ads removeAdsById(Long adId, Authentication authentication);
 
     /**
      * Getting a comment by ID
@@ -71,11 +73,12 @@ public interface AdsService {
     /**
      * Adds a comment to an ad
      *
-     * @param adPk          Ad ID
-     * @param adsCommentDto Comment model Dto with author, createdAt, text
+     * @param adPk           Ad ID
+     * @param adsCommentDto  Comment model Dto with author, createdAt, text
+     * @param authentication
      * @return AdsCommentDto
      */
-    AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto);
+    AdsComment addAdsComments(long adPk, AdsCommentDto adsCommentDto, Authentication authentication);
 
     /**
      * Deletes a comment
@@ -84,7 +87,7 @@ public interface AdsService {
      * @param id   AdsComment id
      * @return ResponseEntity<HttpStatus>
      */
-    AdsComment deleteAdsComment(long adPk, long id);
+    AdsComment deleteAdsComment(long adPk, long id, Authentication authentication);
 
     /**
      * Updates an ad`s info
@@ -93,7 +96,7 @@ public interface AdsService {
      * @param createAdsDto DTO carrying changes
      * @return ResponseEntity<AdsDto>
      */
-    Ads updateAds(Long adId, CreateAdsDto createAdsDto);
+    Ads updateAds(Long adId, CreateAdsDto createAdsDto, Authentication authentication);
 
     /**
      * Changing the comment by ID
@@ -103,7 +106,7 @@ public interface AdsService {
      * @param adsComment Modified comment
      * @return Modified comment
      */
-    AdsComment updateComments(long adPk, long id, AdsComment adsComment);
+    AdsComment updateComments(long adPk, long id, AdsComment adsComment, Authentication authentication);
 
     /**
      * Updates Image instance`s info (fields: fileSize, mediaType, data).
@@ -113,5 +116,5 @@ public interface AdsService {
      * @param image image file
      * @return ResponseEntity<byte [ ]>
      */
-    void updateAdsImage(long id, MultipartFile image);
+    void updateAdsImage(long id, MultipartFile image, Authentication authentication);
 }

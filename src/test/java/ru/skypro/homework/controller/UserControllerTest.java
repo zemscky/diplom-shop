@@ -5,30 +5,24 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-import ru.skypro.homework.dto.CreateUserDto;
+import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.repository.UserRepository;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import java.time.Instant;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -38,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     @Autowired
-    private WebApplicationContext context;
+    private UserRepository userRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -64,35 +58,34 @@ public class UserControllerTest {
 
     @WithMockUser(value = "a@mail.ru", password = "12345678")
     @Test
-    void addUser() throws Exception {
+    void update() throws Exception {
+        userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.USER));
+
         User user = new User();
-        CreateUserDto createUserDto = new CreateUserDto();
+        UserDto userDto = new UserDto();
 
         user.setEmail("a@mail.ru");
         user.setFirstName("Ivan");
         user.setLastName("Ivanov");
-        user.setPassword("12345678");
         user.setPhone("+79991254698");
+        user.setRole(Role.USER);
+        user.setPassword("123");
 
-        createUserDto.setEmail("a@mail.ru");
-        createUserDto.setFirstName("Ivan");
-        createUserDto.setLastName("Ivanov");
-        createUserDto.setPassword("12345678");
-        createUserDto.setPhone("+79991254698");
+        userDto.setEmail("a@mail.ru");
+        userDto.setFirstName("Ivan");
+        userDto.setLastName("Ivanov");
+        userDto.setPhone("+79991254698");
 
-        mockMvc.perform(post("/users").
-                        contentType(MediaType.APPLICATION_JSON).
-                        content(objectMapper.writeValueAsString(createUserDto))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/users/me").with(httpBasic("a@mail.ru","12345678"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userDto))
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value(user.getEmail()))
-                .andExpect(jsonPath("$.password").isString())
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(user.getLastName()))
                 .andExpect(jsonPath("$.phone").value(user.getPhone()));
-
-
     }
 
 }
