@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(RegisterReqDto registerReqDto, Role role) {
+    public boolean register(RegisterReqDto registerReqDto) {
         User user = userMapper.toEntity(registerReqDto);
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ValidationException(String.format("User \"%s\" is already registered!", user.getEmail()));

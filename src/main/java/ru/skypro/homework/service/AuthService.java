@@ -15,7 +15,7 @@ public interface AuthService {
     boolean login(String userName, String password);
 
     /**
-     * @param role User role
+     * @param registerReqDto User req
      */
-    boolean register(RegisterReqDto registerReqDto, Role role);
+    boolean register(RegisterReqDto registerReqDto);
 }
