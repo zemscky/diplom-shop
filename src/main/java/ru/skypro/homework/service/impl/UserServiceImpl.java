@@ -82,7 +82,9 @@ public class UserServiceImpl implements UserService {
     @SneakyThrows
     public String updateUserImage(MultipartFile image) {
         User user = getUserById(getUserDetailsFromContext().getId());
-        imageService.remove(user.getImage());
+        if (user.getImage() != null) {
+            imageService.remove(user.getImage());
+        }
         user.setImage(imageService.uploadImage(image));
         return "/users/image/" + userRepository.save(user).getImage().getId();
     }

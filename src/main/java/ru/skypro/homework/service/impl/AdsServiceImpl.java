@@ -125,7 +125,9 @@ public class AdsServiceImpl implements AdsService {
         }
         Ads ads = getAdsById(id);
         checkPermissionToAds(ads);
-        imageService.remove(ads.getImage());
+        if (ads.getImage() != null) {
+            imageService.remove(ads.getImage());
+        }
         ads.setImage(imageService.uploadImage(image));
         adsRepository.save(ads);
     }
