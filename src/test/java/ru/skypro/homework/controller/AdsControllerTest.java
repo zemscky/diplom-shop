@@ -23,6 +23,9 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -119,7 +122,15 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getAdsComment() {
+    @WithMockUser
+    void getAdsComment() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+        commentRepository.save(ADS_COMMENT);
+
+        mockMvc.perform(get("/ads/1/comment/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -161,7 +172,7 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getComments() {
+    void getComments()  {
     }
 
     @Test

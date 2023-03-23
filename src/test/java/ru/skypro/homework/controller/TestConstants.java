@@ -6,6 +6,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
+import ru.skypro.homework.entity.AdsComment;
 import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.security.MyUserDetails;
@@ -72,4 +73,6 @@ public class TestConstants {
     }
 
     public static final Ads ADS = new Ads(ID, TITLE, DESCRIPTION, PRICE, USER, ADS_IMAGE);
+
+    public static final AdsComment ADS_COMMENT = new AdsComment(ID,Instant.now(),"text",USER,ADS);
 }
