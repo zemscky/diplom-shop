@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
-import static ru.skypro.homework.security.SecurityUtils.getUserDetailsFromContext;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
@@ -55,20 +54,6 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    @Test
-    void createUser() {
-        User testUser = new User();
-        testUser.setPassword("123456789");
-
-        when(userRepository.existsByEmailIgnoreCase(any())).thenReturn(false);
-        when(passwordEncoder.encode(any())).thenReturn("12345678");
-        when(userRepository.save(any(User.class))).thenReturn(testUser);
-
-        User user = userService.createUser(testUser);
-
-        assertEquals(testUser, user);
-        assertEquals(testUser.getPassword(), user.getPassword());
-    }
 
     @Test
     void getUsers() {
@@ -81,9 +66,8 @@ public class UserServiceImplTest {
 
         when(userRepository.findByEmailIgnoreCase(testUser.getEmail())).thenReturn(Optional.of(testUser));
         when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
 
-        User user = userService.getUser();
+        User user = userService.getUser(authentication);
 
         assertEquals(user, testUser);
 
@@ -129,10 +113,9 @@ public class UserServiceImplTest {
         SecurityContextHolder.setContext(securityContext);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(user));
         when(userRepository.findById(123L)).thenReturn(Optional.of(user));
 
-        userService.updateUser(dto);
+        userService.updateUser(dto, authentication);
 
         assertEquals(user.getId(), dto.getId());
         assertEquals(user.getFirstName(), dto.getFirstName());
@@ -153,11 +136,10 @@ public class UserServiceImplTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
         when(passwordEncoder.encode(any())).thenReturn("12345678");
 
-        userService.newPassword("12345678", "87654321");
+        userService.updatePassword("12345678", "87654321", authentication);
 
         assertTrue(true);
     }
@@ -192,12 +174,11 @@ public class UserServiceImplTest {
         SecurityContextHolder.setContext(securityContext);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(getUserDetailsFromContext()).thenReturn(new MyUserDetails(testUser));
         when(imageService.uploadImage(multipartFile)).thenReturn(new Image(12, 123, "media", new byte[1]));
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.save(any())).thenReturn(testUser);
 
-        String webPath = userService.updateUserImage(multipartFile);
+        String webPath = userService.updateUserImage(multipartFile, authentication);
 
         assertEquals("/users/image/" + 12, webPath);
 
