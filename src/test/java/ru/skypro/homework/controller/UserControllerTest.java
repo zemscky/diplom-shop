@@ -51,10 +51,10 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity()) // enable security for the mock set up
-                .build();
+//        mockMvc = MockMvcBuilders
+//                .webAppContextSetup(context)
+//                .apply(springSecurity()) // enable security for the mock set up
+//                .build();
     }
 
     @Test
