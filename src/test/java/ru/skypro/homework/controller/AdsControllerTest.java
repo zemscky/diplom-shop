@@ -1,6 +1,6 @@
 package ru.skypro.homework.controller;
 
-import org.assertj.core.api.Assertions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,10 +23,10 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUtils;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.skypro.homework.controller.TestConstants.*;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -48,10 +48,12 @@ public class AdsControllerTest {
     AdsRepository adsRepository;
     @Autowired
     AdsCommentRepository commentRepository;
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     void contextLoads() {
-        Assertions.assertThat(adsController).isNotNull();
+        assertThat(adsController).isNotNull();
     }
 
     @BeforeAll
@@ -153,11 +155,36 @@ public class AdsControllerTest {
     }
 
     @Test
-    void updateAdsImage() {
+    @WithMockUser
+    void updateAdsImage() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        MockPart partFile = new MockPart("image", "image", new byte[3]);
+
+        mockMvc.perform(patch("/ads/1/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .with(request -> {
+                            request.addPart(partFile);
+                            return request;
+                        }))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
-    void removeAds() {
+    @WithMockUser
+    void removeAds() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        assertThat(adsRepository.findById(ID).get()).isEqualTo(ADS);
+
+        mockMvc.perform(delete("/ads/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertThat(adsRepository.findById(ID)).isEmpty();
     }
 
     @Test
@@ -169,6 +196,13 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getAdsImage() {
+    void getAdsImage() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        mockMvc.perform(get("/ads/image/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(ADS_IMAGE.getData()));
     }
 }

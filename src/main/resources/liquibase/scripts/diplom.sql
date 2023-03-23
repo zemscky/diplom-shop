@@ -38,7 +38,7 @@ create table ads_comment
 (
     id bigserial PRIMARY KEY,
     created_at timestamp,
-    "text" varchar(1000),
+    text varchar(1000),
     author_id bigint REFERENCES users(id),
     pk_ads bigint REFERENCES ads(id)
 );
