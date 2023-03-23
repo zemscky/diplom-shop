@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,9 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.security.MyUserDetails;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
+import ru.skypro.homework.service.AuthService;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +41,9 @@ public class AuthControllerTest {
     @Autowired
     AuthController authController;
 
+    @Autowired
+    AuthService authService;
+
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
 
@@ -52,7 +58,7 @@ public class AuthControllerTest {
         Assertions.assertThat(authController).isNotNull();
     }
 
-    private static User getMockUser() {
+    public static User getMockUser() {
         User user = new User();
         user.setId(1L);
         user.setEmail("test@mail.com");
@@ -116,6 +122,8 @@ public class AuthControllerTest {
                         .characterEncoding("utf-8")
                         .content(json))
                 .andExpect(status().is(403));
+        assertThrows(BadCredentialsException.class,
+                () -> authService.login(req.getUsername(), req.getPassword()), "Wrong password!");
     }
 
     @Test
