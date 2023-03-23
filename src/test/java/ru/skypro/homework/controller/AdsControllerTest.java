@@ -23,8 +23,7 @@ import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.SecurityUtils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -136,11 +135,37 @@ public class AdsControllerTest {
     }
 
     @Test
-    void deleteAdsComment() {
+    @WithMockUser
+    void deleteAdsComment() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+        commentRepository.save(ADS_COMMENT);
+
+        mockMvc.perform(delete("/ads/1/comments/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
-    void updateComments() {
+    @WithMockUser
+    void updateComments() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+        commentRepository.save(ADS_COMMENT);
+
+        JSONObject createAdsDtoCommentJson = new JSONObject();
+        createAdsDtoCommentJson.put("pk", 1);
+        createAdsDtoCommentJson.put("author", 1);
+        createAdsDtoCommentJson.put("text", "test");
+        createAdsDtoCommentJson.put("createdAt", Instant.now());
+
+        mockMvc.perform(patch("/ads/1/comments/1")
+                        .content(createAdsDtoCommentJson.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(jsonPath("$.pk").value(ID))
+                .andExpect(jsonPath("$.author").value(ADS_COMMENT.getAuthor().getId()))
+                .andExpect(jsonPath("$.text").value("test"));
     }
 
     @Test
