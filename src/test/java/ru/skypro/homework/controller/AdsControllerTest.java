@@ -13,6 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.AdsCommentRepository;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.ImageRepository;
@@ -57,6 +59,12 @@ public class AdsControllerTest {
         userRepository.save(USER);
     }
 
+    void addAdAndCommentToRepositoriesForSomeTests() {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+        commentRepository.save(ADS_COMMENT);
+    }
+
     @Test
     void getAllAds() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/ads"))
@@ -94,11 +102,11 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void getFullAd() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         mockMvc.perform(get("/ads/1"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
                 .andExpect(jsonPath("$.authorLastName").value(USER.getLastName()))
                 .andExpect(jsonPath("$.authorFirstName").value(USER.getFirstName()))
@@ -112,10 +120,16 @@ public class AdsControllerTest {
 
     @Test
     @WithMockUser
+    void getFullAdThrowsNotFoundExceptionIfAdNotFound() throws Exception {
+        mockMvc.perform(get("/ads/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
     void getAdsComment() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
-        commentRepository.save(ADS_COMMENT);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         mockMvc.perform(get("/ads/1/comments/1"))
                 .andDo(print())
@@ -128,9 +142,7 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void deleteAdsComment() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
-        commentRepository.save(ADS_COMMENT);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         mockMvc.perform(delete("/ads/1/comments/1"))
                 .andDo(print())
@@ -140,9 +152,7 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void updateComments() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
-        commentRepository.save(ADS_COMMENT);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         JSONObject createAdsDtoCommentJson = new JSONObject();
         createAdsDtoCommentJson.put("pk", 1);
@@ -162,8 +172,7 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void updateAds() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         JSONObject createAdsDtoJson = new JSONObject();
         createAdsDtoJson.put("description", "new description");
@@ -174,6 +183,7 @@ public class AdsControllerTest {
                         .content(createAdsDtoJson.toString())
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").value(ID))
                 .andExpect(jsonPath("$.author").value(ID))
                 .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
@@ -184,8 +194,7 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void updateAdsImage() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         MockPart partFile = new MockPart("image", "image", new byte[3]);
 
@@ -202,8 +211,7 @@ public class AdsControllerTest {
     @Test
     @WithMockUser
     void removeAds() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         assertThat(adsRepository.findById(ID).get()).isEqualTo(ADS);
 
@@ -215,11 +223,23 @@ public class AdsControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "email", password = "0123456789")
+    void removeAdsThrowsAccessDeniedExceptionIfUserIsNotCreatorOfAdNorAdmin() throws Exception {
+        addAdAndCommentToRepositoriesForSomeTests();
+
+        User stranger = new User(2, "test", "test", "email", "0123456789",
+                "+79998887766", "city", Instant.now(), null, Role.USER);
+        userRepository.save(stranger);
+
+        mockMvc.perform(delete("/ads/1"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser
     void getComments() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
-        commentRepository.save(ADS_COMMENT);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         mockMvc.perform(get("/ads/1/comments"))
                 .andExpect(status().isOk())
@@ -245,8 +265,7 @@ public class AdsControllerTest {
 
     @Test
     void getAdsImage() throws Exception {
-        imageRepository.save(ADS_IMAGE);
-        adsRepository.save(ADS);
+        addAdAndCommentToRepositoriesForSomeTests();
 
         mockMvc.perform(get("/ads/image/2"))
                 .andDo(print())
