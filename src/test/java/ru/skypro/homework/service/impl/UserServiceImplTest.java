@@ -17,7 +17,6 @@ import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.security.MyUserDetails;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
 
 import java.util.Optional;
