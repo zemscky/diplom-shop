@@ -82,7 +82,7 @@ public class AuthControllerThrowTest {
                         .content(json))
                 .andExpect(status().is(400));
         assertThrows(ValidationException.class,
-                () -> authService.register(req, Role.USER),
+                () -> authService.register(req),
                 "User test@mail.com is already registered!");
     }
 }
