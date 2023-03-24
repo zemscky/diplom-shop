@@ -21,9 +21,9 @@ import ru.skypro.homework.dto.LoginReqDto;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.security.MyUserDetails;
-import ru.skypro.homework.security.UserDetailsServiceImpl;
-import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.repository.UserRepository;
+
+import javax.validation.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,25 +42,15 @@ public class AuthControllerTest {
     AuthController authController;
 
     @Autowired
-    AuthService authService;
-
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
+    UserRepository userRepository;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
 
     private static ObjectMapper mapper = new ObjectMapper();
 
-
-    @Test
-    void contextLoads() {
-        Assertions.assertThat(authController).isNotNull();
-    }
-
     public static User getMockUser() {
         User user = new User();
-        user.setId(1L);
         user.setEmail("test@mail.com");
         user.setPassword("password");
         user.setFirstName("FirstName");
@@ -73,10 +63,15 @@ public class AuthControllerTest {
     @BeforeEach
     public void init() {
         User user = getMockUser();
+        userRepository.save(user);
         Authentication auth = new UsernamePasswordAuthenticationToken(getMockUser(), "password");
         SecurityContextHolder.getContext().setAuthentication(auth);
-        Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(new MyUserDetails(user));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+    }
+
+    @Test
+    void contextLoads() {
+        Assertions.assertThat(authController).isNotNull();
     }
 
     @Test
@@ -85,13 +80,25 @@ public class AuthControllerTest {
         LoginReqDto req = new LoginReqDto();
         req.setUsername(user.getEmail());
         req.setPassword(user.getPassword());
+
+        // Test when user is already registered
         String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
-                        .content(json)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .content(json))
                 .andExpect(status().isOk());
+
+        // Test when user is not registered yet
+        req.setUsername("unregistered@mail.com");
+        String jsonNew = mapper.writeValueAsString(req);
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(jsonNew))
+                .andExpect(status().is(403));
+        assertThrows(BadCredentialsException.class,
+                () -> authController.login(req), "User unregistered@mail.com does not exist!");
     }
 
     @Test
@@ -123,7 +130,7 @@ public class AuthControllerTest {
                         .content(json))
                 .andExpect(status().is(403));
         assertThrows(BadCredentialsException.class,
-                () -> authService.login(req.getUsername(), req.getPassword()), "Wrong password!");
+                () -> authController.login(req), "Wrong password!");
     }
 
     @Test
@@ -136,10 +143,24 @@ public class AuthControllerTest {
         req.setLastName(user.getLastName());
         req.setPhone(user.getPhone());
         req.setRole(null);
+
+        // Test when user is already registered
         String json = mapper.writeValueAsString(req);
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
                         .content(json))
+                .andExpect(status().is(400));
+        assertThrows(ValidationException.class,
+                () -> authController.register(req), "User test@mail.com is already registered!");
+
+        // Test when user is not registered yet
+        req.setUsername("unregistered@mail.com");
+        String jsonNew = mapper.writeValueAsString(req);
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(jsonNew))
                 .andExpect(status().isOk());
     }
 }
