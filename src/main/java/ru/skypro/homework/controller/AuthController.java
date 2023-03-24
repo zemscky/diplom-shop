@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginReqDto;
 import ru.skypro.homework.dto.RegisterReqDto;
-import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
-
-import static ru.skypro.homework.dto.Role.USER;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

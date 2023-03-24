@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.impl;
 
-import liquibase.repackaged.net.sf.jsqlparser.util.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,8 +18,6 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
-
-import java.time.Instant;
 
 @Transactional
 @RequiredArgsConstructor

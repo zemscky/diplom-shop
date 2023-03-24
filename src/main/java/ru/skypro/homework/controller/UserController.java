@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.CreateUserDto;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
@@ -19,8 +18,6 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.entity.User;
-
-import javax.validation.Valid;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

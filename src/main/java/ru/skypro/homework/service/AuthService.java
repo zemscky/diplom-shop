@@ -1,7 +1,6 @@
 package ru.skypro.homework.service;
 
 import ru.skypro.homework.dto.RegisterReqDto;
-import ru.skypro.homework.dto.Role;
 
 /**
  * Service for user registration and login
