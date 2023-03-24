@@ -34,14 +34,6 @@ public class UserController {
     private final UserMapper userMapper;
     private final ImageService imageService;
 
-//    @Operation(summary = "addUser", description = "addUser")
-//    @PostMapping
-//    public ResponseEntity<CreateUserDto> addUser(@Valid @RequestBody CreateUserDto createUserDto) {
-//        printLogInfo("addUser", "post", "");
-//        User user = userService.createUser(userMapper.createUserDtoToEntity(createUserDto));
-//        return ResponseEntity.ok(userMapper.toCreateUserDto(user));
-//    }
-
     @Operation(summary = "updateUser", description = "updateUser")
     @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, Authentication authentication) {
