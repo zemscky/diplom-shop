@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.mock.web.MockMultipartFile;
+import ru.skypro.homework.dto.AdsCommentDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ads;
@@ -70,6 +71,27 @@ public class TestConstants {
     }
 
     public static final Ads ADS = new Ads(ID, TITLE, DESCRIPTION, PRICE, USER, ADS_IMAGE);
+
+    public static final JSONObject CREATE_ADS_DTO_COMMENT_JSON = new JSONObject();
+
+    static {
+        try {
+            CREATE_ADS_DTO_COMMENT_JSON.put("author", 1);
+            CREATE_ADS_DTO_COMMENT_JSON.put("created_at", Instant.now());
+            CREATE_ADS_DTO_COMMENT_JSON.put("text", "Hello World");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final AdsCommentDto ADS_DTO_COMMENT = new AdsCommentDto();
+
+    static {
+        ADS_DTO_COMMENT.setPk(1);
+        ADS_DTO_COMMENT.setCreatedAt(String.valueOf(Instant.now()));
+        ADS_DTO_COMMENT.setAuthor(1);
+        ADS_DTO_COMMENT.setText("Hello World");
+    }
 
     public static final AdsComment ADS_COMMENT = new AdsComment(ID,Instant.now(),"text",USER,ADS);
 }
