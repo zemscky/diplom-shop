@@ -32,11 +32,14 @@ public class AuthServiceImpl implements AuthService {
         try {
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userName);
             String encryptedPassword = userDetails.getPassword();
-            return encoder.matches(password, encryptedPassword);
+            if (!encoder.matches(password, encryptedPassword)) {
+                throw new BadCredentialsException("Wrong password!");
+            }
+            return true;
         } catch (UsernameNotFoundException e) {
             throw new BadCredentialsException(String.format("User \"%s\" does not exist!", userName));
         } catch (IllegalArgumentException e) {
-            throw new BadCredentialsException("Wrong password!");
+            throw new BadCredentialsException("Bad credentials!");
         }
     }
 
