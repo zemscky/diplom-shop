@@ -43,18 +43,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
     }
 
-//    public User createUser(User user) {
-//        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
-//            throw new ValidationException(String.format("User \"%s\" already exists!", user.getEmail()));
-//        }
-//        if (user.getRole() == null) {
-//            user.setRole(Role.USER);
-//        }
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.setRegDate(Instant.now());
-//        return userRepository.save(user);
-//    }
-
     @Override
     public User updateUser(UserDto userDto, Authentication authentication) {
         User user = getUserByUsername(authentication.getName());

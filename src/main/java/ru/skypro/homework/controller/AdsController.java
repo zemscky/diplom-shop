@@ -42,15 +42,15 @@ public class AdsController {
         return ResponseWrapper.of(adsMapper.toDto(adsService.getAllAds()));
     }
 
-//    @SneakyThrows
-//    @Operation(summary = "addAds", description = "addAds")
-//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<AdsDto> addAds(@Parameter(description = "Данные нового объявления")
-//                                         @RequestPart("image") MultipartFile imageFile,
-//                                         @Valid @RequestPart("properties") CreateAdsDto createAdsDto, Authentication authentication) {
-//        printLogInfo("POST", "", "addAds");
-//        return ResponseEntity.ok(adsMapper.toDto(adsService.addAds(createAdsDto, imageFile, authentication)));
-//    }
+    @SneakyThrows
+    @Operation(summary = "addAds", description = "addAds")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDto> addAds(@Parameter(description = "Данные нового объявления")
+                                         @RequestPart("image") MultipartFile imageFile,
+                                         @Valid @RequestPart("properties") CreateAdsDto createAdsDto, Authentication authentication) {
+        printLogInfo("POST", "", "addAds");
+        return ResponseEntity.ok(adsMapper.toDto(adsService.addAds(createAdsDto, imageFile, authentication)));
+    }
 
     @Operation(summary = "getAdsMe", description = "getAdsMe")
     @GetMapping("/me")

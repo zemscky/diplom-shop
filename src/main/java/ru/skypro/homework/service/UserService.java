@@ -8,14 +8,6 @@ import ru.skypro.homework.entity.User;
 
 public interface UserService {
 
-//    /**
-//     * Create User
-//     *
-//     * @param user User object
-//     * @return User Created User
-//     */
-//    User createUser(User user);
-
     /**
      * Get all users from repository
      * and return them all
