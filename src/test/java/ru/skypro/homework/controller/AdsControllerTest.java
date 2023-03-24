@@ -66,6 +66,7 @@ public class AdsControllerTest {
     }
 
     @Test
+    @WithMockUser
     void addAds() throws Exception {
         mockMvc.perform(multipart("/ads")
                         .file(IMAGE_FILE)
