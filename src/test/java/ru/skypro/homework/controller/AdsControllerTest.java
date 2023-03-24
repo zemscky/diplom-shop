@@ -21,6 +21,7 @@ import ru.skypro.homework.repository.UserRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.time.Instant;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -64,21 +65,21 @@ public class AdsControllerTest {
                 .andExpect(jsonPath("$.results").isEmpty());
     }
 
-//    @Test
-//    void addAds() throws Exception {
-//        mockMvc.perform(multipart("/ads")
-//                        .file(IMAGE_FILE)
-//                        .part(new MockPart("properties", CREATE_ADS_DTO_JSON.toString().getBytes()))
-//                )
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.pk").value(ID))
-//                .andExpect(jsonPath("$.author").value(ID))
-//                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
-//                .andExpect(jsonPath("$.price").value(PRICE))
-//                .andExpect(jsonPath("$.title").value(TITLE))
-//                .andDo(print());
-//    }
+    @Test
+    void addAds() throws Exception {
+        mockMvc.perform(multipart("/ads")
+                        .file(IMAGE_FILE)
+                        .part(new MockPart("properties", CREATE_ADS_DTO_JSON.toString().getBytes()))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pk").value(ID))
+                .andExpect(jsonPath("$.author").value(ID))
+                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
+                .andExpect(jsonPath("$.price").value(PRICE))
+                .andExpect(jsonPath("$.title").value(TITLE))
+                .andDo(print());
+    }
 
     @Test
     @WithMockUser
@@ -119,7 +120,8 @@ public class AdsControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").value(ADS_COMMENT.getId()))
-                .andExpect(jsonPath("$.author").value(ADS_COMMENT.getAuthor().getId()));
+                .andExpect(jsonPath("$.author").value(ADS_COMMENT.getAuthor().getId()))
+                .andExpect(jsonPath("$.text").value("text"));
     }
 
     @Test
@@ -149,9 +151,9 @@ public class AdsControllerTest {
 
         mockMvc.perform(patch("/ads/1/comments/1")
                         .content(createAdsDtoCommentJson.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$.pk").value(ID))
+                .andExpect(jsonPath("$.pk").value(ADS_COMMENT.getId()))
                 .andExpect(jsonPath("$.author").value(ADS_COMMENT.getAuthor().getId()))
                 .andExpect(jsonPath("$.text").value("test"));
     }
@@ -169,7 +171,7 @@ public class AdsControllerTest {
 
         mockMvc.perform(patch("/ads/1")
                         .content(createAdsDtoJson.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.pk").value(ID))
                 .andExpect(jsonPath("$.author").value(ID))
@@ -212,11 +214,32 @@ public class AdsControllerTest {
     }
 
     @Test
-    void getComments()  {
+    @WithMockUser
+    void getComments() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+        commentRepository.save(ADS_COMMENT);
+
+        mockMvc.perform(get("/ads/1/comments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(1))
+                .andExpect(jsonPath("$.results").isNotEmpty());
     }
 
     @Test
-    void addAdsComments() {
+    @WithMockUser
+    void addAdsComments() throws Exception {
+        imageRepository.save(ADS_IMAGE);
+        adsRepository.save(ADS);
+
+        mockMvc.perform(post("/ads/1/comments")
+                .content(CREATE_ADS_DTO_COMMENT_JSON.toString())
+                .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pk").value(1))
+                .andExpect(jsonPath("$.author").value(1))
+                .andExpect(jsonPath("$.text").value("Hello World"));
     }
 
     @Test
