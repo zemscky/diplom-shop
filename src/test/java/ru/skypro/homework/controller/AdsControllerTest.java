@@ -64,21 +64,22 @@ public class AdsControllerTest {
                 .andExpect(jsonPath("$.results").isEmpty());
     }
 
-//    @Test
-//    void addAds() throws Exception {
-//        mockMvc.perform(multipart("/ads")
-//                        .file(IMAGE_FILE)
-//                        .part(new MockPart("properties", CREATE_ADS_DTO_JSON.toString().getBytes()))
-//                )
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.pk").value(ID))
-//                .andExpect(jsonPath("$.author").value(ID))
-//                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
-//                .andExpect(jsonPath("$.price").value(PRICE))
-//                .andExpect(jsonPath("$.title").value(TITLE))
-//                .andDo(print());
-//    }
+    @Test
+    @WithMockUser
+    void addAds() throws Exception {
+        mockMvc.perform(multipart("/ads")
+                        .file(IMAGE_FILE)
+                        .part(new MockPart("properties", CREATE_ADS_DTO_JSON.toString().getBytes()))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pk").value(ID))
+                .andExpect(jsonPath("$.author").value(ID))
+                .andExpect(jsonPath("$.image").value(ADS_IMAGE_STRING))
+                .andExpect(jsonPath("$.price").value(PRICE))
+                .andExpect(jsonPath("$.title").value(TITLE))
+                .andDo(print());
+    }
 
     @Test
     @WithMockUser
