@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,27 +10,39 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.mock.web.MockPart;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.Image;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.io.IOException;
 import java.time.Instant;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
@@ -37,6 +50,9 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -49,14 +65,6 @@ public class UserControllerTest {
 
     @MockBean
     private PasswordEncoder passwordEncoder;
-
-    @BeforeEach
-    public void setup() {
-//        mockMvc = MockMvcBuilders
-//                .webAppContextSetup(context)
-//                .apply(springSecurity()) // enable security for the mock set up
-//                .build();
-    }
 
     @Test
     void contextLoads() {
@@ -84,7 +92,7 @@ public class UserControllerTest {
         userDto.setLastName("Ivanov");
         userDto.setPhone("+79991254698");
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/users/me").with(httpBasic("a@mail.ru","12345678"))
+        mockMvc.perform(patch("/users/me").with(httpBasic("a@mail.ru","12345678"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto))
                         .accept(MediaType.APPLICATION_JSON))
@@ -109,7 +117,7 @@ public class UserControllerTest {
         when(passwordEncoder.matches("12345678", "12345678")).thenReturn(true);
         when(passwordEncoder.encode("87654321")).thenReturn("87654321");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/users/set_password")
+        mockMvc.perform(post("/users/set_password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(passwordDto))
                         .accept(MediaType.APPLICATION_JSON))
@@ -119,6 +127,89 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.newPassword").value(passwordDto.getNewPassword()));
     }
 
+    @WithMockUser(value = "a@mail.ru", password = "12345678")
+    @Test
+    void updateUserImage() throws Exception {
+        userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.USER));
+
+        MockPart partFile = new MockPart("image", "image", new byte[3]);
+
+        mockMvc.perform(patch("/users/me/image")
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .with(request -> {
+                            request.addPart(partFile);
+                            return request;
+                        }))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @WithMockUser(value = "a@mail.ru", password = "12345678")
+    @Test
+    void getUserById() throws Exception {
+        User user = userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.USER));
+
+        mockMvc.perform(get("/users/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(user.getId()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(user.getLastName()))
+                .andExpect(jsonPath("$.phone").value(user.getPhone()));
+
+    }
+
+    @WithMockUser(value = "a@mail.ru", password = "12345678")
+    @Test
+    void getUser() throws Exception {
+        User user = userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.USER));
+
+        mockMvc.perform(get("/users/me"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(user.getId()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(user.getLastName()))
+                .andExpect(jsonPath("$.phone").value(user.getPhone()));
+
+    }
+
+    @WithMockUser(value = "a@mail.ru", password = "12345678")
+    @Test
+    void getImageById() throws Exception {
+        Image image = imageRepository.save(new Image(1L, 4, "png", new byte[1]));
+
+        mockMvc.perform(get("/users/image/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().bytes(image.getData()));
+    }
+
+    @WithMockUser(value = "a@mail.ru", password = "12345678", authorities = "ADMIN")
+    @Test
+    void updateRole() throws Exception {
+        User user = userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.ADMIN));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1/updateRole")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Role.USER))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1/updateRole")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Role.ADMIN))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
 
 

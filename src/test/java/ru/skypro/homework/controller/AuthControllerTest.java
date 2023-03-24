@@ -134,7 +134,7 @@ public class AuthControllerTest {
     @Test
     public void testRegisterUser() throws Exception {
         User user = getMockUser();
-        user.setId(2L);
+        user.setEmail("newEmail");
         RegisterReqDto req = new RegisterReqDto();
         req.setUsername(user.getEmail());
         req.setPassword(user.getPassword());
