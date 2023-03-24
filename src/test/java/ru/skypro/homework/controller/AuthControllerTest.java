@@ -21,6 +21,7 @@ import ru.skypro.homework.dto.LoginReqDto;
 import ru.skypro.homework.dto.RegisterReqDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.security.MyUserDetails;
 import ru.skypro.homework.security.UserDetailsServiceImpl;
 import ru.skypro.homework.service.AuthService;
@@ -41,11 +42,14 @@ public class AuthControllerTest {
     @Autowired
     AuthController authController;
 
-    @Autowired
-    AuthService authService;
+//    @Autowired
+//    AuthService authService;
 
-    @MockBean
-    private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    UserRepository userRepository;
+
+//    @MockBean
+//    private UserDetailsServiceImpl userDetailsService;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
@@ -73,9 +77,10 @@ public class AuthControllerTest {
     @BeforeEach
     public void init() {
         User user = getMockUser();
+        userRepository.save(user);
         Authentication auth = new UsernamePasswordAuthenticationToken(getMockUser(), "password");
         SecurityContextHolder.getContext().setAuthentication(auth);
-        Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(new MyUserDetails(user));
+//        Mockito.when(userDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(new MyUserDetails(user));
         Mockito.when(passwordEncoder.matches(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
     }
 
@@ -123,12 +128,13 @@ public class AuthControllerTest {
                         .content(json))
                 .andExpect(status().is(403));
         assertThrows(BadCredentialsException.class,
-                () -> authService.login(req.getUsername(), req.getPassword()), "Wrong password!");
+                () -> authController.login(req), "Wrong password!");
     }
 
     @Test
     public void testRegisterUser() throws Exception {
         User user = getMockUser();
+        user.setId(2L);
         RegisterReqDto req = new RegisterReqDto();
         req.setUsername(user.getEmail());
         req.setPassword(user.getPassword());

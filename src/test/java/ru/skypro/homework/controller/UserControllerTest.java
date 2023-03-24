@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
@@ -20,11 +23,12 @@ import ru.skypro.homework.repository.UserRepository;
 
 import java.time.Instant;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-@ActiveProfiles("test")
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
@@ -43,6 +47,9 @@ public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     public void setup() {
 //        mockMvc = MockMvcBuilders
@@ -58,7 +65,7 @@ public class UserControllerTest {
 
     @WithMockUser(value = "a@mail.ru", password = "12345678")
     @Test
-    void update() throws Exception {
+    void updateUser() throws Exception {
         userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
                 "446486568", null, Instant.now(), null, Role.USER));
 
@@ -86,6 +93,30 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
                 .andExpect(jsonPath("$.lastName").value(user.getLastName()))
                 .andExpect(jsonPath("$.phone").value(user.getPhone()));
+    }
+
+    @WithMockUser(value = "a@mail.ru", password = "12345678")
+    @Test
+    void setPassword() throws Exception {
+        userRepository.save(new User(1L, "fgsfd", "fdsfsd", "a@mail.ru", "12345678",
+                "446486568", null, Instant.now(), null, Role.USER));
+
+
+        NewPasswordDto passwordDto = new NewPasswordDto();
+        passwordDto.setCurrentPassword("12345678");
+        passwordDto.setNewPassword("87654321");
+
+        when(passwordEncoder.matches("12345678", "12345678")).thenReturn(true);
+        when(passwordEncoder.encode("87654321")).thenReturn("87654321");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/set_password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(passwordDto))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPassword").value(passwordDto.getCurrentPassword()))
+                .andExpect(jsonPath("$.newPassword").value(passwordDto.getNewPassword()));
     }
 
 }
