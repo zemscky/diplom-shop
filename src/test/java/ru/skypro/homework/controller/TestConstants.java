@@ -21,7 +21,6 @@ public class TestConstants {
     public static final String DESCRIPTION = "description";
     public static final int PRICE = 10;
     public static final String TITLE = "title";
-    public static final String USER_IMAGE_STRING = "/users/image/1";
     public static final String ADS_IMAGE_STRING = "/ads/image/2";
     public static final Image USER_IMAGE;
 
