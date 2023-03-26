@@ -69,9 +69,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<byte[]> getImageById(@PathVariable("id") int id) {
+    public ResponseEntity<byte[]> getImageById(@PathVariable("id") int id, Authentication authentication) {
         printLogInfo("getImageOfUser", "get", "/image/{id}");
-        return ResponseEntity.ok(imageService.getImageById(id).getData());
+        return ResponseEntity.ok(imageService.getImageById(userService.getUser(authentication).getImage().getId()).getData());
     }
 
     @Operation(summary = "updateRole", description = "updateRole")
